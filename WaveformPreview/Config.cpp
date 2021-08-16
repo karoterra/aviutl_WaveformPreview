@@ -12,15 +12,30 @@ std::string Config::ColorToString(COLORREF color)
     return oss.str();
 }
 
-COLORREF Config::StringToColor(const std::string &str)
+COLORREF Config::StringToColor(const std::string &str, COLORREF def)
 {
     if (str.length() < 6) {
-        return RGB(0, 0, 0);
+        return def;
     }
     int r = stoi(str.substr(0, 2), nullptr, 16);
     int g = stoi(str.substr(2, 2), nullptr, 16);
     int b = stoi(str.substr(4, 2), nullptr, 16);
     return RGB(r, g, b);
+}
+
+COLORREF Config::IniLoadColor(FILTER *fp, LPSTR key, COLORREF def)
+{
+    try {
+        char buf[1024];
+        string defStr = ColorToString(def);
+        if (fp->exfunc->ini_load_str(fp, key, buf, const_cast<LPSTR>(defStr.c_str())) == FALSE) {
+            return def;
+        }
+        return StringToColor(buf, def);
+    }
+    catch (...) {
+        return def;
+    }
 }
 
 Config::Config()
@@ -66,59 +81,38 @@ bool Config::LoadUserConfig(FILTER *fp)
     scaleX = fp->exfunc->ini_load_int(fp, "scaleX", 0);
     scaleY = fp->exfunc->ini_load_int(fp, "scaleY", 0);
     dbMin = fp->exfunc->ini_load_int(fp, "dbMin", -60);
+    if (dbMin >= 0) {
+        dbMin = -60;
+    }
 
     enableGrid = fp->exfunc->ini_load_int(fp, "enableGrid", 0);
     beat = fp->exfunc->ini_load_int(fp, "beat", 4);
+    if (beat < 1) {
+        beat = 4;
+    }
     offset = fp->exfunc->ini_load_int(fp, "offset", 1);
     if (fp->exfunc->ini_load_str(fp, "tempo", buf, "100") == FALSE) {
-        return false;
+        SetTempo("100");
     }
     SetTempo(buf);
+    if (m_dTempo <= 0) {
+        SetTempo("100");
+    }
 
     autoFocus = fp->exfunc->ini_load_int(fp, "autoFocus", 1);
     pivot = fp->exfunc->ini_load_int(fp, "pivot", 0);
     cacheRange = fp->exfunc->ini_load_int(fp, "cacheRange", 1);
 
-    if (fp->exfunc->ini_load_str(fp, "backgroundColor", buf, "000000") == FALSE) {
-        return false;
-    }
-    backgroundColor = StringToColor(buf);
-    if (fp->exfunc->ini_load_str(fp, "waveformColor", buf, "00ff00") == FALSE) {
-        return false;
-    }
-    waveformColor = StringToColor(buf);
-    if (fp->exfunc->ini_load_str(fp, "scaleColor", buf, "ffffff") == FALSE) {
-        return false;
-    }
-    scaleColor = StringToColor(buf);
-    if (fp->exfunc->ini_load_str(fp, "cursorColor", buf, "ff0000") == FALSE) {
-        return false;
-    }
-    cursorColor = StringToColor(buf);
-    if (fp->exfunc->ini_load_str(fp, "endColor", buf, "888888") == FALSE) {
-        return false;
-    }
-    endColor = StringToColor(buf);
-    if (fp->exfunc->ini_load_str(fp, "cacheColor", buf, "ff0000") == FALSE) {
-        return false;
-    }
-    cacheColor = StringToColor(buf);
-    if (fp->exfunc->ini_load_str(fp, "selectColor", buf, "007acc") == FALSE) {
-        return false;
-    }
-    selectColor = StringToColor(buf);
-    if (fp->exfunc->ini_load_str(fp, "nonSelectColor", buf, "303030") == FALSE) {
-        return false;
-    }
-    nonSelectColor = StringToColor(buf);
-    if (fp->exfunc->ini_load_str(fp, "gridMainColor", buf, "808080") == FALSE) {
-        return false;
-    }
-    gridMainColor = StringToColor(buf);
-    if (fp->exfunc->ini_load_str(fp, "gridSubColor", buf, "303030") == FALSE) {
-        return false;
-    }
-    gridSubColor = StringToColor(buf);
+    backgroundColor = IniLoadColor(fp, "backgroundColor", RGB(0x00, 0x00, 0x00));
+    waveformColor = IniLoadColor(fp, "waveformColor", RGB(0x00, 0xff, 0x00));
+    scaleColor = IniLoadColor(fp, "scaleColor", RGB(0xff, 0xff, 0xff));
+    cursorColor = IniLoadColor(fp, "cursorColor", RGB(0xff, 0x00, 0x00));
+    endColor = IniLoadColor(fp, "endColor", RGB(0x88, 0x88, 0x88));
+    cacheColor = IniLoadColor(fp, "cacheColor", RGB(0xff, 0x00, 0x00));
+    selectColor = IniLoadColor(fp, "selectColor", RGB(0x00, 0x7a, 0xcc));
+    nonSelectColor = IniLoadColor(fp, "nonSelectColor", RGB(0x30, 0x30, 0x30));
+    gridMainColor = IniLoadColor(fp, "gridMainColor", RGB(0x80, 0x80, 0x80));
+    gridSubColor = IniLoadColor(fp, "gridSubColor", RGB(0x50, 0x50, 0x50));
 
     return true;
 }
@@ -132,7 +126,7 @@ bool Config::SaveUserConfig(FILTER *fp) const
     fp->exfunc->ini_save_int(fp, "enableGrid", enableGrid);
     fp->exfunc->ini_save_int(fp, "beat", beat);
     fp->exfunc->ini_save_int(fp, "offset", offset);
-    if (fp->exfunc->ini_save_str(fp, "tempo", const_cast<char*>(m_tempo.ToString().c_str())) == FALSE) {
+    if (fp->exfunc->ini_save_str(fp, "tempo", const_cast<LPSTR>(m_tempo.ToString().c_str())) == FALSE) {
         return false;
     }
 
@@ -140,16 +134,16 @@ bool Config::SaveUserConfig(FILTER *fp) const
     fp->exfunc->ini_save_int(fp, "pivot", pivot);
     fp->exfunc->ini_save_int(fp, "cacheRange", cacheRange);
 
-    fp->exfunc->ini_save_str(fp, "backgroundColor", const_cast<char *>(ColorToString(backgroundColor).c_str()));
-    fp->exfunc->ini_save_str(fp, "waveformColor", const_cast<char *>(ColorToString(waveformColor).c_str()));
-    fp->exfunc->ini_save_str(fp, "scaleColor", const_cast<char *>(ColorToString(scaleColor).c_str()));
-    fp->exfunc->ini_save_str(fp, "cursorColor", const_cast<char *>(ColorToString(cursorColor).c_str()));
-    fp->exfunc->ini_save_str(fp, "endColor", const_cast<char *>(ColorToString(endColor).c_str()));
-    fp->exfunc->ini_save_str(fp, "cacheColor", const_cast<char *>(ColorToString(cacheColor).c_str()));
-    fp->exfunc->ini_save_str(fp, "selectColor", const_cast<char *>(ColorToString(selectColor).c_str()));
-    fp->exfunc->ini_save_str(fp, "nonSelectColor", const_cast<char *>(ColorToString(nonSelectColor).c_str()));
-    fp->exfunc->ini_save_str(fp, "gridMainColor", const_cast<char *>(ColorToString(gridMainColor).c_str()));
-    fp->exfunc->ini_save_str(fp, "gridSubColor", const_cast<char *>(ColorToString(gridSubColor).c_str()));
+    fp->exfunc->ini_save_str(fp, "backgroundColor", const_cast<LPSTR>(ColorToString(backgroundColor).c_str()));
+    fp->exfunc->ini_save_str(fp, "waveformColor", const_cast<LPSTR>(ColorToString(waveformColor).c_str()));
+    fp->exfunc->ini_save_str(fp, "scaleColor", const_cast<LPSTR>(ColorToString(scaleColor).c_str()));
+    fp->exfunc->ini_save_str(fp, "cursorColor", const_cast<LPSTR>(ColorToString(cursorColor).c_str()));
+    fp->exfunc->ini_save_str(fp, "endColor", const_cast<LPSTR>(ColorToString(endColor).c_str()));
+    fp->exfunc->ini_save_str(fp, "cacheColor", const_cast<LPSTR>(ColorToString(cacheColor).c_str()));
+    fp->exfunc->ini_save_str(fp, "selectColor", const_cast<LPSTR>(ColorToString(selectColor).c_str()));
+    fp->exfunc->ini_save_str(fp, "nonSelectColor", const_cast<LPSTR>(ColorToString(nonSelectColor).c_str()));
+    fp->exfunc->ini_save_str(fp, "gridMainColor", const_cast<LPSTR>(ColorToString(gridMainColor).c_str()));
+    fp->exfunc->ini_save_str(fp, "gridSubColor", const_cast<LPSTR>(ColorToString(gridSubColor).c_str()));
 
     return true;
 }

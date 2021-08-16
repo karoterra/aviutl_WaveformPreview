@@ -52,7 +52,8 @@ struct Config
     COLORREF gridSubColor;
 
     static std::string ColorToString(COLORREF color);
-    static COLORREF StringToColor(const std::string &str);
+    static COLORREF StringToColor(const std::string &str, COLORREF def = 0);
+    static COLORREF IniLoadColor(FILTER *fp, LPSTR key, COLORREF def);
 
     Config();
 

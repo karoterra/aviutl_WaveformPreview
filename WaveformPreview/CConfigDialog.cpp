@@ -92,11 +92,16 @@ void CConfigDialog::DoDataExchange(CDataExchange *pDX)
     DDX_Radio(pDX, IDC_SCALE_X_TIME, m_scaleX);
     DDX_Radio(pDX, IDC_SCALE_Y_LINEAR, m_scaleY);
     DDX_Text(pDX, IDC_DB_MIN, m_dbMin);
+    DDV_MinMaxInt(pDX, m_dbMin, INT_MIN, -1);
 
     DDX_Check(pDX, IDC_ENABLE_GRID, m_enableGrid);
     DDX_Text(pDX, IDC_TEMPO, m_tempo);
     if (m_tempo.ToDouble() < 0) {
         AfxMessageBox("0‚æ‚è‘å‚«‚¢’l‚ð“ü—Í‚µ‚Ä‚­‚¾‚³‚¢");
+        pDX->Fail();
+    }
+    if (m_tempo.ToString().length() > 1023) {
+        AfxMessageBox("1023•¶ŽšˆÈ‰º‚Å“ü—Í‚µ‚Ä‚­‚¾‚³‚¢");
         pDX->Fail();
     }
     DDX_Text(pDX, IDC_BEAT, m_beat);
