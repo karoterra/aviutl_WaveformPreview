@@ -1,0 +1,4 @@
+LIBRARY WaveformPreview.auf
+
+EXPORTS
+	GetFilterTable @1
