@@ -33,7 +33,6 @@ EXTERN_C __declspec(dllexport) FILTER_DLL *__stdcall GetFilterTable()
 BOOL func_init(FILTER *fp)
 {
     if (!AfxWinInit(fp->dll_hinst, nullptr, ::GetCommandLine(), 0)) {
-        OutputDebugString("WP failed to AfxWinInit\n");
         AfxMessageBox(_T("波形プレビューの初期化に失敗しました。\n(AfxWinInit)"));
         return FALSE;
     }

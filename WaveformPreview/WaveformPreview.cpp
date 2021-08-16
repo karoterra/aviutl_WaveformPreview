@@ -22,7 +22,7 @@ WaveformPreview::~WaveformPreview()
 BOOL WaveformPreview::Init(FILTER *fp)
 {
     if (m_wnd.Attach(fp->hwnd) == FALSE) {
-        OutputDebugString("Failed to attach hwnd");
+        AfxMessageBox(_T("波形プレビューの初期化に失敗しました。\n(m_wnd.Attach)"));
         return FALSE;
     }
     m_wnd.SetWindowText(fp->name);
@@ -32,15 +32,29 @@ BOOL WaveformPreview::Init(FILTER *fp)
     m_zoom.Create(CPoint(0, 0), &m_wnd, (UINT)CommandId::Zoom);
 
     CRect updateRect(m_zoom.Width, 0, m_zoom.Width + 95, 25);
-    m_cacheBtn.Create("キャッシュ作成", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, updateRect, &m_wnd, (UINT)CommandId::Cache);
+    DWORD style = WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON;
+    if (m_cacheBtn.Create("キャッシュ作成", style, updateRect, &m_wnd, (UINT)CommandId::Cache) == FALSE) {
+        AfxMessageBox(_T("波形プレビューの初期化に失敗しました。\n(m_cacheBtn.Create)"));
+        m_wnd.Detach();
+        return FALSE;
+    }
     m_cacheBtn.SetFont(&m_font);
 
     CRect configRect(updateRect.right, 0, updateRect.right + 50, 25);
-    m_configBtn.Create("設定", WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON, configRect, &m_wnd, (UINT)CommandId::Config);
+    style = WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON;
+    if (m_configBtn.Create("設定", style, configRect, &m_wnd, (UINT)CommandId::Config) == FALSE) {
+        AfxMessageBox(_T("波形プレビューの初期化に失敗しました。\n(m_configBtn.Create)"));
+        m_wnd.Detach();
+        return FALSE;
+    }
     m_configBtn.SetFont(&m_font);
 
     m_waveformRect = CRect(0, m_zoom.Height, m_rect.right, m_rect.bottom);
-    m_waveform.Create(m_waveformRect, &m_wnd, &m_font);
+    if (m_waveform.Create(m_waveformRect, &m_wnd, &m_font) == FALSE) {
+        AfxMessageBox(_T("波形プレビューの初期化に失敗しました。\n(m_waveform.Create)"));
+        m_wnd.Detach();
+        return FALSE;
+    }
 
     m_waitCursor = LoadCursor(NULL, IDC_WAIT);
 
