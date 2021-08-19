@@ -52,7 +52,6 @@ BOOL func_proc(FILTER *fp, FILTER_PROC_INFO *fpip)
         return FALSE;
     }
     wp.LoadStatus(fp, fpip->editp);
-    wp.Display();
     return TRUE;
 }
 
@@ -66,7 +65,7 @@ BOOL func_WndProc(HWND hwnd, UINT message, WPARAM wparam, LPARAM lparam, void *e
 
     switch (message) {
     case WM_FILTER_FILE_CLOSE:
-        res = wp.OnFileClose();
+        res = wp.OnFileClose(fp, editp);
         break;
     case WM_FILTER_CHANGE_WINDOW:
         if (fp->exfunc->is_filter_active(fp) && fp->exfunc->is_filter_window_disp(fp)) {

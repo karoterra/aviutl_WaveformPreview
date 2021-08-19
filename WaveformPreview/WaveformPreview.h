@@ -30,6 +30,7 @@ public:
     void CreateCache(FILTER *fp, void *editp);
 
     void Display();
+    void Update(FILTER *fp, void *editp, int pos, bool recreate);
 
     void ZoomIn();
     void ZoomOut();
@@ -50,8 +51,7 @@ public:
 
     void ShowConfigDialog();
 
-    BOOL OnFileOpen(FILTER *fp, void *editp);
-    BOOL OnFileClose();
+    BOOL OnFileClose(FILTER *fp, void *editp);
 
     void OnSize(FILTER *fp, void *editp, int width, int height);
     BOOL OnCommand(FILTER *fp, void *editp, WPARAM wParam, LPARAM lParam);

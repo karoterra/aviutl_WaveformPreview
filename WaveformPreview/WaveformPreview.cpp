@@ -95,7 +95,6 @@ void WaveformPreview::ClearStatus()
 void WaveformPreview::LoadStatus(FILTER *fp, void *editp)
 {
     m_editStatus.Load(fp, editp);
-    CreateWaveform(fp, editp);
 
     int pos = GetScrollPos();
     int last = pos + (int)(m_waveformRect.Width() / GetPpf());
@@ -103,11 +102,9 @@ void WaveformPreview::LoadStatus(FILTER *fp, void *editp)
         && (m_editStatus.currentFrame < pos || last < m_editStatus.currentFrame))
     {
         pos = (int)(m_editStatus.currentFrame - m_waveformRect.Width() / 2 / GetPpf());
-        SetScrollPos(pos);
     }
-    else {
-        SetScrollPos(pos);
-    }
+
+    Update(fp, editp, pos, false);
 }
 
 void WaveformPreview::CreateWaveform(FILTER *fp, void *editp)
@@ -159,6 +156,18 @@ void WaveformPreview::Display()
     m_waveform.Invalidate();
     m_waveform.UpdateWindow();
     return;
+}
+
+void WaveformPreview::Update(FILTER *fp, void *editp, int pos, bool recreate)
+{
+    int prev = GetScrollPos();
+    SetScrollPos(pos);
+
+    if (recreate || !m_editStatus.IsCached() || prev != pos) {
+        CreateWaveform(fp, editp);
+    }
+
+    Display();
 }
 
 void WaveformPreview::ZoomIn()
@@ -255,17 +264,10 @@ void WaveformPreview::ShowConfigDialog()
     m_wnd.SetActiveWindow();
 }
 
-BOOL WaveformPreview::OnFileOpen(FILTER *fp, void *editp)
-{
-    LoadStatus(fp, editp);
-    Display();
-    return FALSE;
-}
-
-BOOL WaveformPreview::OnFileClose()
+BOOL WaveformPreview::OnFileClose(FILTER *fp, void *editp)
 {
     ClearStatus();
-    Display();
+    Update(fp, editp, 0, true);
     return FALSE;
 }
 
@@ -275,12 +277,11 @@ void WaveformPreview::OnSize(FILTER *fp, void *editp, int width, int height)
     m_rect.bottom = height;
     m_waveformRect.right = width;
     m_waveformRect.bottom = height;
-    SetScrollPos(GetScrollPos());
-    CreateWaveform(fp, editp);
     m_waveform.MoveWindow(
         m_waveformRect.left, m_waveformRect.top,
         m_waveformRect.Width(), m_waveformRect.Height()
     );
+    Update(fp, editp, GetScrollPos(), true);
 }
 
 BOOL WaveformPreview::OnCommand(FILTER *fp, void *editp, WPARAM wParam, LPARAM lParam)
@@ -295,7 +296,7 @@ BOOL WaveformPreview::OnCommand(FILTER *fp, void *editp, WPARAM wParam, LPARAM l
         else {
             CreateCache(fp, editp);
         }
-        Display();
+        Update(fp, editp, GetScrollPos(), true);
         break;
     case (UINT)CommandId::Config:
         ShowConfigDialog();
@@ -315,9 +316,7 @@ BOOL WaveformPreview::OnCommand(FILTER *fp, void *editp, WPARAM wParam, LPARAM l
             }
             double cursorX = (current - GetScrollPos()) * prevPpf;
             int pos = (int)(current - cursorX / GetPpf());
-            SetScrollPos(pos);
-            CreateWaveform(fp, editp);
-            Display();
+            Update(fp, editp, pos, false);
         }
         break;
     }
@@ -399,27 +398,26 @@ BOOL WaveformPreview::OnMouseWheel(FILTER *fp, void *editp, UINT flags, short de
     else {
         int pos = GetScrollPos();
         pos -= (int)(100.0 * delta / WHEEL_DELTA / GetPpf());
-        SetScrollPos(pos);
-        CreateWaveform(fp, editp);
-        Display();
+        Update(fp, editp, pos, false);
     }
     return FALSE;
 }
 
 BOOL WaveformPreview::OnHScroll(FILTER *fp, void *editp, UINT sbCode, UINT pos)
 {
+    int _pos = GetScrollPos();
     switch (sbCode) {
     case SB_LEFT:
-        SetScrollPos(0);
+        _pos = 0;
         break;
     case SB_RIGHT:
-        SetScrollPos(m_editStatus.totalFrame - 1);
+        _pos = m_editStatus.totalFrame - 1;
         break;
     case SB_LINELEFT:
-        SetScrollPos((int)(GetScrollPos() - 10 / GetPpf()));
+        _pos = (int)(GetScrollPos() - 10 / GetPpf());
         break;
     case SB_LINERIGHT:
-        SetScrollPos((int)(GetScrollPos() + 10 / GetPpf()));
+        _pos = (int)(GetScrollPos() + 10 / GetPpf());
         break;
     case SB_PAGELEFT:
         break;
@@ -428,12 +426,11 @@ BOOL WaveformPreview::OnHScroll(FILTER *fp, void *editp, UINT sbCode, UINT pos)
     case SB_THUMBTRACK: {
         SCROLLINFO si{ sizeof(SCROLLINFO), SIF_TRACKPOS };
         m_wnd.GetScrollInfo(SB_HORZ, &si);
-        SetScrollPos(si.nTrackPos);
+        _pos = si.nTrackPos;
         break;
     }
     }
-    CreateWaveform(fp, editp);
-    Display();
+    Update(fp, editp, _pos, false);
     return FALSE;
 }
 
