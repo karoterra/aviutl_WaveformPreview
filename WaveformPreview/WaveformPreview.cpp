@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "WaveformPreview.h"
 #include "CConfigDialog.h"
+#include "misc.h"
 
 using namespace std;
 
@@ -22,7 +23,7 @@ WaveformPreview::~WaveformPreview()
 BOOL WaveformPreview::Init(FILTER *fp)
 {
     if (m_wnd.Attach(fp->hwnd) == FALSE) {
-        AfxMessageBox(_T("波形プレビューの初期化に失敗しました。\n(m_wnd.Attach)"));
+        ShowError(NULL, _T("波形プレビューの初期化に失敗しました。\n(m_wnd.Attach)"));
         return FALSE;
     }
     m_wnd.SetWindowText(fp->name);
@@ -34,7 +35,7 @@ BOOL WaveformPreview::Init(FILTER *fp)
     CRect updateRect(m_zoom.Width, 0, m_zoom.Width + 95, 25);
     DWORD style = WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON;
     if (m_cacheBtn.Create("キャッシュ作成", style, updateRect, &m_wnd, (UINT)CommandId::Cache) == FALSE) {
-        AfxMessageBox(_T("波形プレビューの初期化に失敗しました。\n(m_cacheBtn.Create)"));
+        ShowError(NULL, _T("波形プレビューの初期化に失敗しました。\n(m_cacheBtn.Create)"));
         m_wnd.Detach();
         return FALSE;
     }
@@ -43,7 +44,7 @@ BOOL WaveformPreview::Init(FILTER *fp)
     CRect configRect(updateRect.right, 0, updateRect.right + 50, 25);
     style = WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON;
     if (m_configBtn.Create("設定", style, configRect, &m_wnd, (UINT)CommandId::Config) == FALSE) {
-        AfxMessageBox(_T("波形プレビューの初期化に失敗しました。\n(m_configBtn.Create)"));
+        ShowError(NULL, _T("波形プレビューの初期化に失敗しました。\n(m_configBtn.Create)"));
         m_wnd.Detach();
         return FALSE;
     }
@@ -51,7 +52,7 @@ BOOL WaveformPreview::Init(FILTER *fp)
 
     m_waveformRect = CRect(0, m_zoom.Height, m_rect.right, m_rect.bottom);
     if (m_waveform.Create(m_waveformRect, &m_wnd, &m_font) == FALSE) {
-        AfxMessageBox(_T("波形プレビューの初期化に失敗しました。\n(m_waveform.Create)"));
+        ShowError(NULL, _T("波形プレビューの初期化に失敗しました。\n(m_waveform.Create)"));
         m_wnd.Detach();
         return FALSE;
     }
@@ -144,7 +145,7 @@ void WaveformPreview::CreateCache(FILTER *fp, void *editp)
         m_cacheBtn.SetWindowTextA(_T("キャッシュ削除"));
     }
     catch (...) {
-        AfxMessageBox(_T("キャッシュの作成に失敗しました。\n選択範囲を狭くして再度試してください。"));
+        ShowWarning(NULL, _T("キャッシュの作成に失敗しました。\n選択範囲を狭くして再度試してください。"));
         ClearCache();
     }
 

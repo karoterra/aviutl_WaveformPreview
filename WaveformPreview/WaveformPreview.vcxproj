@@ -180,6 +180,7 @@
     <ClInclude Include="EditStatus.h" />
     <ClInclude Include="filter.h" />
     <ClInclude Include="DecimalEx.h" />
+    <ClInclude Include="misc.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="WaveformPreview.h" />
@@ -192,6 +193,7 @@
     <ClCompile Include="EditStatus.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="DecimalEx.cpp" />
+    <ClCompile Include="misc.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>

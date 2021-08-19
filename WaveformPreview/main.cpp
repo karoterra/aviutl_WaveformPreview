@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "WaveformPreview.h"
+#include "misc.h"
 
 using namespace std;
 
@@ -33,7 +34,7 @@ EXTERN_C __declspec(dllexport) FILTER_DLL *__stdcall GetFilterTable()
 BOOL func_init(FILTER *fp)
 {
     if (!AfxWinInit(fp->dll_hinst, nullptr, ::GetCommandLine(), 0)) {
-        AfxMessageBox(_T("波形プレビューの初期化に失敗しました。\n(AfxWinInit)"));
+        ShowError(NULL, _T("波形プレビューの初期化に失敗しました。\n(AfxWinInit)"));
         return FALSE;
     }
 
