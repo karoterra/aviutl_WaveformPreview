@@ -317,7 +317,7 @@ BOOL WaveformPreview::OnCommand(FILTER *fp, void *editp, WPARAM wParam, LPARAM l
             }
             double cursorX = (current - GetScrollPos()) * prevPpf;
             int pos = (int)(current - cursorX / GetPpf());
-            Update(fp, editp, pos, false);
+            Update(fp, editp, pos, true);
         }
         break;
     }
