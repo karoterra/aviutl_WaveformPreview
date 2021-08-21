@@ -207,7 +207,7 @@ void CWaveformCtrl::OnPaint()
     auto config = m_root->GetConfig();
     double ppf = m_root->GetPpf();
     int pos = m_root->GetScrollPos();
-    CPen cursorPen(PS_SOLID, 0, config->cursorColor);
+    CPen cursorPen(PS_SOLID, 0, config->cursorColor ^ config->backgroundColor);
     CPen endPen(PS_SOLID, 0, config->endColor);
 
     memDC.FillSolidRect(&m_rect, config->backgroundColor);
