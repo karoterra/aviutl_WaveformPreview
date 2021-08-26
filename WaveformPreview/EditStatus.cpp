@@ -14,7 +14,6 @@ void EditStatus::Clear()
     audioRate = 44100;
     audioCh = 0;
     waveform.clear();
-    ClearCache();
 }
 
 void EditStatus::Load(FILTER *fp, void *editp)
@@ -147,45 +146,7 @@ void EditStatus::CreateWaveformMT(FILTER *fp, void *editp, int pos, int width, d
     }
 }
 
-void EditStatus::ClearCache()
-{
-    cacheStart = -1;
-    cacheEnd = -1;
-    audioCache.clear();
-    audioIndex.clear();
-}
-
-void EditStatus::CreateCache(FILTER *fp, void *editp, int start, int end)
-{
-    if (audioCh == 0) {
-        return;
-    }
-
-    start = max(start, 0);
-    end = min(end, totalFrame - 1);
-
-    size_t count = 0;
-    audioIndex.clear();
-    audioIndex.push_back(count);
-    for (int i = 0; i < totalFrame; i++) {
-        count += fp->exfunc->get_audio_filtered(editp, i, nullptr) * audioCh;
-        audioIndex.push_back(count);
-        if (audioIndex.back() == 0) {
-            throw runtime_error("ëIëîÕàÕÇ™çLÇ∑Ç¨Ç‹Ç∑ÅB");
-        }
-    }
-
-    audioCache.resize(audioIndex[end + 1] - audioIndex[start]);
-    count = 0;
-    for (int i = start; i <= end; i++) {
-        count += fp->exfunc->get_audio_filtered(editp, i, &audioCache[count]) * audioCh;
-    }
-
-    cacheStart = start;
-    cacheEnd = end;
-}
-
-void EditStatus::CreateWaveformFromCache(FILTER *fp, void *editp, int pos, int width, double ppf)
+void EditStatus::CreateWaveformFromCache(CacheProcess &cp, int pos, int width, double ppf)
 {
     if (audioCh == 0) {
         return;
@@ -200,33 +161,26 @@ void EditStatus::CreateWaveformFromCache(FILTER *fp, void *editp, int pos, int w
         width = (int)ceil((totalFrame - pos) * ppf);
     }
 
-    size_t cacheStartIdx = audioIndex[cacheStart];
-    size_t cacheSize = audioCache.size();
-
-#pragma omp parallel for
+#   pragma omp parallel for
     for (int x = 0; x < width; x++) {
-        size_t first = GetIndex(pos + x / ppf) - cacheStartIdx;
-        size_t last = GetIndex(pos + (x + 1) / ppf) - cacheStartIdx;
-
-        for (size_t i = first; i < last; i++) {
-            if (i < 0) {
-                continue;
-            }
-            if (i >= cacheSize) {
-                break;
-            }
+        double range[2] = { pos - cacheStart + x / ppf, pos - cacheStart + (x + 1) / ppf };
+        vector<short> data;
+#       pragma omp critical
+        {
+            cp.GetSamples(range, data);
+        }
+        for (size_t i = 0; i < data.size(); i++) {
             int ch = i % audioCh;
             size_t idx = (x * audioCh + ch) * 2;
-            short v = audioCache[i];
-            waveform[idx] = max(v, waveform[idx]);
-            waveform[idx + 1] = min(v, waveform[idx + 1]);
+            waveform[idx] = max(data[i], waveform[idx]);
+            waveform[idx + 1] = min(data[i], waveform[idx + 1]);
         }
     }
 }
 
 bool EditStatus::IsCached() const
 {
-    return audioCache.size() > 0;
+    return cacheStart != -1;
 }
 
 std::string EditStatus::FrameToTime(int frame) const
@@ -240,19 +194,6 @@ std::string EditStatus::FrameToTime(int frame) const
     int s = t % 60;
     snprintf(buf, 32, "%02d:%02d:%02d.%02d", h, m, s, ms);
     return buf;
-}
-
-size_t EditStatus::GetIndex(double frame) const
-{
-    if (frame >= totalFrame) {
-        return audioIndex.back();
-    }
-
-    size_t iFrame = (size_t)frame;
-    size_t index = audioIndex[iFrame];
-    size_t next = audioIndex[iFrame + 1];
-    index += (size_t)((next - index) / audioCh * (frame - iFrame)) * audioCh;
-    return index;
 }
 
 bool EditStatus::IsSelectAll() const

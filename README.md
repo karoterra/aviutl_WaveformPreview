@@ -8,7 +8,7 @@
 1. [Releases](https://github.com/karoterra/aviutl_WaveformPreview/releases/)
    から最新版のZIPファイルをダウンロードしてください。
 2. ZIPファイルを展開し、 `aviutl.exe` と同じ場所、または `aviutl.exe` と同じ場所にある
-   `plugins` フォルダに `WaveformPreview.auf` をコピーしてください。
+   `plugins` フォルダに `WaveformPreview.auf` と `WaveformPreview.exe` をコピーしてください。
 
 ## 使い方
 

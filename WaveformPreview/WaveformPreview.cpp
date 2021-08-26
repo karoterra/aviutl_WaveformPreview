@@ -59,6 +59,15 @@ BOOL WaveformPreview::Init(FILTER *fp)
 
     m_waitCursor = LoadCursor(NULL, IDC_WAIT);
 
+    try {
+        m_cacheProcess.Init(fp->dll_hinst);
+    }
+    catch (runtime_error &e) {
+        m_cacheBtn.EnableWindow(FALSE);
+        string s = "キャッシュマネージャーの初期化に失敗しました。\n\n" + string(e.what());
+        ShowError(NULL, s.c_str());
+    }
+
     m_editStatus.Clear();
     this->SetScrollPos(0);
 
@@ -84,6 +93,13 @@ void WaveformPreview::Exit(FILTER *fp)
     m_wnd.Detach();
     m_playbackWnd.Detach();
     m_config.SaveUserConfig(fp);
+    try {
+        m_cacheProcess.Exit();
+    }
+    catch (runtime_error &e) {
+        string msg = "キャッシュマネージャーとの通信に失敗しました。\n\n" + string(e.what());
+        ShowError(m_wnd.m_hWnd, msg.c_str());
+    }
 }
 
 void WaveformPreview::ClearStatus()
@@ -113,8 +129,16 @@ void WaveformPreview::CreateWaveform(FILTER *fp, void *editp)
     HCURSOR cursor = SetCursor(m_waitCursor);
 
     if (m_editStatus.IsCached()) {
-        m_editStatus.CreateWaveformFromCache(fp, editp,
-            GetScrollPos(), m_waveformRect.Width(), GetPpf());
+        try {
+            m_editStatus.CreateWaveformFromCache(m_cacheProcess,
+                GetScrollPos(), m_waveformRect.Width(), GetPpf());
+        }
+        catch (runtime_error &e) {
+            m_cacheProcess.Terminate();
+            m_cacheBtn.EnableWindow(FALSE);
+            string msg = "キャッシュマネージャーとの通信に失敗しました。\n\n" + string(e.what());
+            ShowError(m_wnd.m_hWnd, msg.c_str());
+        }
     }
     else {
         m_editStatus.CreateWaveform(fp, editp,
@@ -126,8 +150,18 @@ void WaveformPreview::CreateWaveform(FILTER *fp, void *editp)
 
 void WaveformPreview::ClearCache()
 {
-    m_editStatus.ClearCache();
-    m_cacheBtn.SetWindowTextA(_T("キャッシュ作成"));
+    try {
+        m_editStatus.cacheStart = -1;
+        m_editStatus.cacheEnd = -1;
+        m_cacheBtn.SetWindowTextA(_T("キャッシュ作成"));
+        m_cacheProcess.Clear();
+    }
+    catch (runtime_error &e) {
+        m_cacheProcess.Terminate();
+        m_cacheBtn.EnableWindow(FALSE);
+        string msg = "キャッシュマネージャーとの通信に失敗しました。\n\n" + string(e.what());
+        ShowError(m_wnd.m_hWnd, msg.c_str());
+    }
 }
 
 void WaveformPreview::CreateCache(FILTER *fp, void *editp)
@@ -136,17 +170,26 @@ void WaveformPreview::CreateCache(FILTER *fp, void *editp)
 
     int start = m_editStatus.selectStart;
     int end = m_editStatus.selectEnd;
-    if (m_config.cacheRange == (int)CacheRange::Display) {
+    if (m_editStatus.IsSelectAll() && m_config.cacheRange == (int)CacheRange::Display) {
         start = GetScrollPos();
         end = start + (int)(m_waveformRect.Width() / GetPpf());
+        end = min(end, m_editStatus.totalFrame - 1);
     }
     try {
-        m_editStatus.CreateCache(fp, editp, start, end);
+        m_cacheProcess.CreateCache(fp, editp, start, end);
+        m_editStatus.cacheStart = start;
+        m_editStatus.cacheEnd = end;
         m_cacheBtn.SetWindowTextA(_T("キャッシュ削除"));
     }
-    catch (...) {
+    catch (bad_alloc &e) {
         ShowWarning(NULL, _T("キャッシュの作成に失敗しました。\n選択範囲を狭くして再度試してください。"));
         ClearCache();
+    }
+    catch (runtime_error &e) {
+        m_cacheProcess.Terminate();
+        m_cacheBtn.EnableWindow(FALSE);
+        string msg = "キャッシュマネージャーとの通信に失敗しました。\n\n" + string(e.what());
+        ShowError(m_wnd.m_hWnd, msg.c_str());
     }
 
     SetCursor(cursor);

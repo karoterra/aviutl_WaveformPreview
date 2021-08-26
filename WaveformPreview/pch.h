@@ -23,3 +23,5 @@
 #include <stdexcept>
 
 #include "filter.h"
+
+typedef const BYTE *LPCBYTE;

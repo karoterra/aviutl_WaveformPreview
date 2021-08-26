@@ -4,6 +4,7 @@
 #include "CZoomIndicator.h"
 #include "CWaveformCtrl.h"
 #include "Config.h"
+#include "CacheProcess.h"
 
 class WaveformPreview
 {
@@ -85,6 +86,7 @@ protected:
     CFont m_font;
     HCURSOR m_waitCursor;
 
+    CacheProcess m_cacheProcess;
     EditStatus m_editStatus;
 
     Config m_config;

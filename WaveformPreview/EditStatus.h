@@ -1,5 +1,7 @@
 #pragma once
 
+#include "CacheProcess.h"
+
 using AudioBuf = std::vector<short>;
 
 struct EditStatus
@@ -14,22 +16,16 @@ struct EditStatus
     int cacheStart = -1;
     int cacheEnd = -1;
     AudioBuf waveform;
-    AudioBuf audioCache;
-    std::vector<size_t> audioIndex;
 
     void Clear();
     void Load(FILTER *fp, void *editp);
     void CreateWaveform(FILTER *fp, void *editp, int pos, int width, double ppf);
     void CreateWaveformMT(FILTER *fp, void *editp, int pos, int width, double ppf);
-    void ClearCache();
-    void CreateCache(FILTER *fp, void *editp, int start, int end);
-    void CreateWaveformFromCache(FILTER *fp, void *editp, int pos, int width, double ppf);
+    void CreateWaveformFromCache(CacheProcess &cp, int pos, int width, double ppf);
 
     bool IsCached() const;
 
     std::string FrameToTime(int frame) const;
-
-    size_t GetIndex(double frame) const;
 
     bool IsSelectAll() const;
 };
