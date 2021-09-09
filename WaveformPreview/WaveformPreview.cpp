@@ -109,16 +109,19 @@ void WaveformPreview::ClearStatus()
     m_prevFrame = 0;
 }
 
-void WaveformPreview::LoadStatus(FILTER *fp, void *editp)
+void WaveformPreview::LoadStatus(FILTER *fp, void *editp, FILTER_PROC_INFO *fpip)
 {
-    m_editStatus.Load(fp, editp);
+    m_editStatus.Load(fp, editp, fpip);
 
     int pos = GetScrollPos();
     int last = pos + (int)(m_waveformRect.Width() / GetPpf());
-    if (m_config.autoFocus
-        && (m_editStatus.currentFrame < pos || last < m_editStatus.currentFrame))
-    {
-        pos = (int)(m_editStatus.currentFrame - m_waveformRect.Width() / 2 / GetPpf());
+    if (m_config.autoFocus) {
+        if (m_editStatus.IsPreview() && (m_editStatus.previewFrame < pos || last < m_editStatus.previewFrame)) {
+            pos = m_editStatus.previewFrame;
+        }
+        else if (!m_editStatus.IsPreview() && (m_editStatus.currentFrame < pos || last < m_editStatus.currentFrame)) {
+            pos = (int)(m_editStatus.currentFrame - m_waveformRect.Width() / 2 / GetPpf());
+        }
     }
 
     Update(fp, editp, pos, false);
@@ -207,7 +210,10 @@ void WaveformPreview::Update(FILTER *fp, void *editp, int pos, bool recreate)
     int prev = GetScrollPos();
     SetScrollPos(pos);
 
-    if (recreate || !m_editStatus.IsCached() || prev != pos) {
+    if (recreate
+        || prev != pos
+        || (!m_editStatus.IsCached() && !m_editStatus.IsPreview()))
+    {
         CreateWaveform(fp, editp);
     }
 

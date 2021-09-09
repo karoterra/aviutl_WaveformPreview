@@ -44,6 +44,7 @@ struct Config
     COLORREF waveformColor;
     COLORREF scaleColor;
     COLORREF cursorColor;
+    COLORREF previewColor;
     COLORREF endColor;
     COLORREF cacheColor;
     COLORREF selectColor;

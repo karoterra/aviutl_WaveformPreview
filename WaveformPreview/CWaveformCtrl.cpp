@@ -209,6 +209,7 @@ void CWaveformCtrl::OnPaint()
     int pos = m_root->GetScrollPos();
     CPen cursorPen(PS_SOLID, 0, config->cursorColor ^ config->backgroundColor);
     CPen endPen(PS_SOLID, 0, config->endColor);
+    CPen previewPen(PS_SOLID, 0, config->previewColor ^ config->backgroundColor);
 
     memDC.FillSolidRect(&m_rect, config->backgroundColor);
 
@@ -231,6 +232,14 @@ void CWaveformCtrl::OnPaint()
     x = (int)((status->currentFrame - pos) * ppf);
     if (status->totalFrame > 0 && 0 <= x && x <= m_rect.right) {
         memDC.SelectObject(&cursorPen);
+        memDC.SetROP2(R2_XORPEN);
+        memDC.MoveTo(x, 0);
+        memDC.LineTo(x, m_rect.bottom);
+    }
+
+    x = (int)((status->previewFrame - pos) * ppf);
+    if (status->IsPreview()) {
+        memDC.SelectObject(&previewPen);
         memDC.SetROP2(R2_XORPEN);
         memDC.MoveTo(x, 0);
         memDC.LineTo(x, m_rect.bottom);

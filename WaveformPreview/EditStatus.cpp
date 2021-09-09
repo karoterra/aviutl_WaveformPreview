@@ -8,6 +8,7 @@ void EditStatus::Clear()
 {
     currentFrame = 0;
     totalFrame = 0;
+    previewFrame = 0;
     selectStart = 0;
     selectEnd = 0;
     videoRate = 30.0;
@@ -16,13 +17,14 @@ void EditStatus::Clear()
     waveform.clear();
 }
 
-void EditStatus::Load(FILTER *fp, void *editp)
+void EditStatus::Load(FILTER *fp, void *editp, FILTER_PROC_INFO *fpip)
 {
     FILE_INFO fi;
     fp->exfunc->get_file_info(editp, &fi);
 
     currentFrame = fp->exfunc->get_frame(editp);
     totalFrame = fi.frame_n;
+    previewFrame = (fpip != nullptr) ? fpip->frame : currentFrame;
     fp->exfunc->get_select_frame(editp, &selectStart, &selectEnd);
 
     if (fi.flag & FILE_INFO_FLAG_VIDEO) {
@@ -176,6 +178,11 @@ void EditStatus::CreateWaveformFromCache(CacheProcess &cp, int pos, int width, d
             waveform[idx + 1] = min(data[i], waveform[idx + 1]);
         }
     }
+}
+
+bool EditStatus::IsPreview() const
+{
+    return currentFrame != previewFrame;
 }
 
 bool EditStatus::IsCached() const

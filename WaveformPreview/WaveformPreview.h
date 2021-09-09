@@ -23,7 +23,7 @@ public:
     void Exit(FILTER *fp);
 
     void ClearStatus();
-    void LoadStatus(FILTER *fp, void *editp);
+    void LoadStatus(FILTER *fp, void *editp, FILTER_PROC_INFO *fpip = nullptr);
 
     void CreateWaveform(FILTER *fp, void *editp);
 

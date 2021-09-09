@@ -7,7 +7,7 @@ using namespace std;
 WaveformPreview wp;
 
 static FILTER_DLL filter = {
-    FILTER_FLAG_ALWAYS_ACTIVE | FILTER_FLAG_DISP_FILTER |
+    FILTER_FLAG_ALWAYS_ACTIVE | FILTER_FLAG_PRIORITY_LOWEST | FILTER_FLAG_NO_INIT_DATA |
     FILTER_FLAG_WINDOW_SIZE | FILTER_FLAG_WINDOW_THICKFRAME | FILTER_FLAG_WINDOW_HSCROLL |
     FILTER_FLAG_EX_INFORMATION,
     400, 300,
@@ -49,10 +49,11 @@ BOOL func_exit(FILTER *fp)
 
 BOOL func_proc(FILTER *fp, FILTER_PROC_INFO *fpip)
 {
-    if (fp->exfunc->is_filter_window_disp(fp) == FALSE) {
+    if (fp->exfunc->is_filter_window_disp(fp) == FALSE
+        || fp->exfunc->is_saving(fpip->editp) == TRUE) {
         return FALSE;
     }
-    wp.LoadStatus(fp, fpip->editp);
+    wp.LoadStatus(fp, fpip->editp, fpip);
     return TRUE;
 }
 

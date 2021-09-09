@@ -8,6 +8,7 @@ struct EditStatus
 {
     int currentFrame = 0;
     int totalFrame = 0;
+    int previewFrame = 0;
     int selectStart = 0;
     int selectEnd = 0;
     double videoRate = 30.0;
@@ -18,11 +19,12 @@ struct EditStatus
     AudioBuf waveform;
 
     void Clear();
-    void Load(FILTER *fp, void *editp);
+    void Load(FILTER *fp, void *editp, FILTER_PROC_INFO *fpip);
     void CreateWaveform(FILTER *fp, void *editp, int pos, int width, double ppf);
     void CreateWaveformMT(FILTER *fp, void *editp, int pos, int width, double ppf);
     void CreateWaveformFromCache(CacheProcess &cp, int pos, int width, double ppf);
 
+    bool IsPreview() const;
     bool IsCached() const;
 
     std::string FrameToTime(int frame) const;

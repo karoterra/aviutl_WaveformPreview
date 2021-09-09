@@ -107,6 +107,7 @@ bool Config::LoadUserConfig(FILTER *fp)
     waveformColor = IniLoadColor(fp, "waveformColor", RGB(0x00, 0xff, 0x00));
     scaleColor = IniLoadColor(fp, "scaleColor", RGB(0xff, 0xff, 0xff));
     cursorColor = IniLoadColor(fp, "cursorColor", RGB(0xff, 0x00, 0x00));
+    previewColor = IniLoadColor(fp, "previewColor", RGB(0x00, 0x00, 0xff));
     endColor = IniLoadColor(fp, "endColor", RGB(0x88, 0x88, 0x88));
     cacheColor = IniLoadColor(fp, "cacheColor", RGB(0xff, 0x00, 0x00));
     selectColor = IniLoadColor(fp, "selectColor", RGB(0x00, 0x7a, 0xcc));
@@ -138,6 +139,7 @@ bool Config::SaveUserConfig(FILTER *fp) const
     fp->exfunc->ini_save_str(fp, "waveformColor", const_cast<LPSTR>(ColorToString(waveformColor).c_str()));
     fp->exfunc->ini_save_str(fp, "scaleColor", const_cast<LPSTR>(ColorToString(scaleColor).c_str()));
     fp->exfunc->ini_save_str(fp, "cursorColor", const_cast<LPSTR>(ColorToString(cursorColor).c_str()));
+    fp->exfunc->ini_save_str(fp, "previewColor", const_cast<LPSTR>(ColorToString(previewColor).c_str()));
     fp->exfunc->ini_save_str(fp, "endColor", const_cast<LPSTR>(ColorToString(endColor).c_str()));
     fp->exfunc->ini_save_str(fp, "cacheColor", const_cast<LPSTR>(ColorToString(cacheColor).c_str()));
     fp->exfunc->ini_save_str(fp, "selectColor", const_cast<LPSTR>(ColorToString(selectColor).c_str()));
