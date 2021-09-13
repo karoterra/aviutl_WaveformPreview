@@ -2,6 +2,7 @@
 #include "WaveformPreview.h"
 #include "CConfigDialog.h"
 #include "misc.h"
+#include <imm.h>
 
 using namespace std;
 
@@ -82,6 +83,8 @@ BOOL WaveformPreview::Init(FILTER *fp)
             break;
         }
     }
+
+    ImmAssociateContext(fp->hwnd, NULL);
 
     m_init = true;
 
