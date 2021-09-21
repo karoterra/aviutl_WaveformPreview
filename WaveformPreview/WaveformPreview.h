@@ -56,8 +56,8 @@ public:
 
     void OnSize(FILTER *fp, void *editp, int width, int height);
     BOOL OnCommand(FILTER *fp, void *editp, WPARAM wParam, LPARAM lParam);
-    BOOL OnKeyDown(FILTER *fp, void *editp, UINT key);
-    BOOL OnKeyUp(FILTER *fp, void *editp, UINT key);
+    BOOL OnKeyDown(FILTER *fp, void *editp, UINT key, LPARAM lParam);
+    BOOL OnKeyUp(FILTER *fp, void *editp, UINT key, LPARAM lParam);
     BOOL OnLButtonDown(FILTER *fp, void *editp, UINT flags, CPoint point);
     BOOL OnMouseWheel(FILTER *fp, void *editp, UINT flags, short delta, CPoint point);
     BOOL OnHScroll(FILTER *fp, void *editp, UINT sbCode, UINT pos);

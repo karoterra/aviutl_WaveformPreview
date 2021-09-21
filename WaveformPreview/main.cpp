@@ -98,10 +98,10 @@ BOOL func_WndProc(HWND hwnd, UINT message, WPARAM wparam, LPARAM lparam, void *e
         }
         break;
     case WM_KEYDOWN:
-        res = wp.OnKeyDown(fp, editp, wparam);
+        res = wp.OnKeyDown(fp, editp, wparam, lparam);
         break;
     case WM_KEYUP:
-        res = wp.OnKeyUp(fp, editp, wparam);
+        res = wp.OnKeyUp(fp, editp, wparam, lparam);
         break;
     }
     return res;

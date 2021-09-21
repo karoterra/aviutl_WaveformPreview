@@ -376,31 +376,10 @@ BOOL WaveformPreview::OnCommand(FILTER *fp, void *editp, WPARAM wParam, LPARAM l
     return FALSE;
 }
 
-BOOL WaveformPreview::OnKeyDown(FILTER *fp, void *editp, UINT key)
+BOOL WaveformPreview::OnKeyDown(FILTER *fp, void *editp, UINT key, LPARAM lParam)
 {
     BOOL res = FALSE;
     switch (key) {
-    case VK_LEFT:
-        res = MoveFrame(fp, editp, m_editStatus.currentFrame - 1, m_isShiftDown);
-        break;
-    case VK_RIGHT:
-        res = MoveFrame(fp, editp, m_editStatus.currentFrame + 1, m_isShiftDown);
-        break;
-    case VK_HOME:
-        res = MoveFrame(fp, editp, 0, m_isShiftDown);
-        break;
-    case VK_END:
-        res = MoveFrame(fp, editp, m_editStatus.totalFrame - 1, m_isShiftDown);
-        break;
-    case 'A':
-        if (m_isCtrlDown && !m_editStatus.IsSelectAll()) {
-            fp->exfunc->set_select_frame(editp, 0, m_editStatus.totalFrame - 1);
-            res = TRUE;
-        }
-        break;
-    case VK_SPACE:
-        Playback();
-        break;
     case VK_SHIFT:
         m_isShiftDown = true;
         break;
@@ -408,10 +387,11 @@ BOOL WaveformPreview::OnKeyDown(FILTER *fp, void *editp, UINT key)
         m_isCtrlDown = true;
         break;
     }
+    m_wnd.GetWindow(GW_OWNER)->PostMessage(WM_KEYDOWN, key, lParam);
     return res;
 }
 
-BOOL WaveformPreview::OnKeyUp(FILTER *fp, void *editp, UINT key)
+BOOL WaveformPreview::OnKeyUp(FILTER *fp, void *editp, UINT key, LPARAM lParam)
 {
     switch (key) {
     case VK_SHIFT:
@@ -421,6 +401,7 @@ BOOL WaveformPreview::OnKeyUp(FILTER *fp, void *editp, UINT key)
         m_isCtrlDown = false;
         break;
     }
+    m_wnd.GetWindow(GW_OWNER)->PostMessage(WM_KEYUP, key, lParam);
     return FALSE;
 }
 
