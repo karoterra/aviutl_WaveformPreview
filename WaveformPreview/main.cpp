@@ -21,7 +21,7 @@ static FILTER_DLL filter = {
     func_WndProc,
     nullptr, nullptr,
     nullptr, 0,
-    _T("波形プレビュー v0.2.0 by karoterra"),
+    _T("波形プレビュー v0.3.0 by karoterra"),
     nullptr,
     nullptr,
 };
