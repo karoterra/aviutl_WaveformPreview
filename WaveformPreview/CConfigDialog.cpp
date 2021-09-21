@@ -41,6 +41,7 @@ void CConfigDialog::LoadConfig(const Config &config)
     m_waveformColor = config.waveformColor;
     m_scaleColor = config.scaleColor;
     m_cursorColor = config.cursorColor;
+    m_previewColor = config.previewColor;
     m_endColor = config.endColor;
     m_cacheColor = config.cacheColor;
     m_selectColor = config.selectColor;
@@ -68,6 +69,7 @@ void CConfigDialog::SaveConfig(Config &config) const
     config.waveformColor = m_waveformColor;
     config.scaleColor = m_scaleColor;
     config.cursorColor = m_cursorColor;
+    config.previewColor = m_previewColor;
     config.endColor = m_endColor;
     config.cacheColor = m_cacheColor;
     config.selectColor = m_selectColor;
@@ -117,6 +119,7 @@ void CConfigDialog::DoDataExchange(CDataExchange *pDX)
         m_waveformColor = GetColor(IDC_COLOR_WAVEFORM);
         m_scaleColor = GetColor(IDC_COLOR_SCALE);
         m_cursorColor = GetColor(IDC_COLOR_CURSOR);
+        m_previewColor = GetColor(IDC_COLOR_PREVIEW);
         m_endColor = GetColor(IDC_COLOR_END);
         m_cacheColor = GetColor(IDC_COLOR_CACHE);
         m_selectColor = GetColor(IDC_COLOR_SELECT);
@@ -129,6 +132,7 @@ void CConfigDialog::DoDataExchange(CDataExchange *pDX)
         SetColor(IDC_COLOR_WAVEFORM, m_waveformColor);
         SetColor(IDC_COLOR_SCALE, m_scaleColor);
         SetColor(IDC_COLOR_CURSOR, m_cursorColor);
+        SetColor(IDC_COLOR_PREVIEW, m_previewColor);
         SetColor(IDC_COLOR_END, m_endColor);
         SetColor(IDC_COLOR_CACHE, m_cacheColor);
         SetColor(IDC_COLOR_SELECT, m_selectColor);

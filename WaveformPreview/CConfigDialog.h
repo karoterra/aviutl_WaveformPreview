@@ -25,6 +25,7 @@ public:
     COLORREF m_waveformColor;
     COLORREF m_scaleColor;
     COLORREF m_cursorColor;
+    COLORREF m_previewColor;
     COLORREF m_endColor;
     COLORREF m_cacheColor;
     COLORREF m_selectColor;

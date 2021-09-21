@@ -27,6 +27,7 @@
 #define IDC_COLOR_NONSELECT             1022
 #define IDC_COLOR_GRID1                 1023
 #define IDC_COLOR_GRID2                 1024
+#define IDC_COLOR_PREVIEW               1025
 
 // Next default values for new objects
 // 
