@@ -53,6 +53,7 @@ public:
     void ShowConfigDialog();
 
     BOOL OnFileClose(FILTER *fp, void *editp);
+    BOOL OnSaveEnd(FILTER *fp, void *edit);
 
     void OnSize(FILTER *fp, void *editp, int width, int height);
     BOOL OnCommand(FILTER *fp, void *editp, WPARAM wParam, LPARAM lParam);

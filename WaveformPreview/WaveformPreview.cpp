@@ -324,6 +324,13 @@ BOOL WaveformPreview::OnFileClose(FILTER *fp, void *editp)
     return FALSE;
 }
 
+BOOL WaveformPreview::OnSaveEnd(FILTER* fp, void* edit)
+{
+    m_zoom.Invalidate();
+    Display();
+    return FALSE;
+}
+
 void WaveformPreview::OnSize(FILTER *fp, void *editp, int width, int height)
 {
     m_rect.right = width;
@@ -407,7 +414,7 @@ BOOL WaveformPreview::OnKeyUp(FILTER *fp, void *editp, UINT key, LPARAM lParam)
 
 BOOL WaveformPreview::OnLButtonDown(FILTER *fp, void *editp, UINT flags, CPoint point)
 {
-    if (!fp->exfunc->is_editing(editp)) {
+    if (!fp->exfunc->is_editing(editp) || fp->exfunc->is_saving(editp)) {
         return FALSE;
     }
 
@@ -421,6 +428,10 @@ BOOL WaveformPreview::OnLButtonDown(FILTER *fp, void *editp, UINT flags, CPoint 
 
 BOOL WaveformPreview::OnMouseWheel(FILTER *fp, void *editp, UINT flags, short delta, CPoint point)
 {
+    if (fp->exfunc->is_saving(editp)) {
+        return FALSE;
+    }
+
     if (flags & MK_CONTROL) {
         if (delta > 0) {
             ZoomIn();
@@ -439,6 +450,10 @@ BOOL WaveformPreview::OnMouseWheel(FILTER *fp, void *editp, UINT flags, short de
 
 BOOL WaveformPreview::OnHScroll(FILTER *fp, void *editp, UINT sbCode, UINT pos)
 {
+    if (fp->exfunc->is_saving(editp)) {
+        return FALSE;
+    }
+
     int _pos = GetScrollPos();
     switch (sbCode) {
     case SB_LEFT:

@@ -74,6 +74,9 @@ BOOL func_WndProc(HWND hwnd, UINT message, WPARAM wparam, LPARAM lparam, void *e
             wp.LoadStatus(fp, editp);
         }
         break;
+    case WM_FILTER_SAVE_END:
+        wp.OnSaveEnd(fp, editp);
+        break;
     case WM_SIZE:
         wp.OnSize(fp, editp, LOWORD(lparam), HIWORD(lparam));
         break;
