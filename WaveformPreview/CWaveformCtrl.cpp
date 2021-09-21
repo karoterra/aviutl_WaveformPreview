@@ -121,8 +121,13 @@ void CWaveformCtrl::DrawScale(CDC *dc)
     dc->SetTextColor(config->scaleColor);
     dc->SetBkColor(config->backgroundColor);
     dc->SelectObject(m_font);
-    dc->MoveTo(0, 29);
-    dc->LineTo(m_rect.right, 29);
+    int ch = (status->audioCh > 0) ? status->audioCh : 1;
+    for (int i = 0; i < ch; i++) {
+        int y = 29 + i * (m_rect.bottom - 29) / ch;
+        dc->MoveTo(0, y);
+        dc->LineTo(m_rect.right, y);
+    }
+
     int frameStep = (int)floor(1 / ppf * 10);
     int scaleX = config->scaleX;
     int frame = pos;
