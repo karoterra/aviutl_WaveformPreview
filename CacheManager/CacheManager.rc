@@ -13,7 +13,7 @@
 #undef APSTUDIO_READONLY_SYMBOLS
 
 /////////////////////////////////////////////////////////////////////////////
-// “ú–{Œê (“ú–{) resources
+// æ—¥æœ¬èª (æ—¥æœ¬) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_JPN)
 LANGUAGE LANG_JAPANESE, SUBLANG_DEFAULT
@@ -67,12 +67,12 @@ BEGIN
     BEGIN
         BLOCK "041104b0"
         BEGIN
-            VALUE "FileDescription", "AviUtl ”gŒ`ƒvƒŒƒrƒ…[ ƒvƒ‰ƒOƒCƒ“—pƒLƒƒƒbƒVƒ…ƒ}ƒl[ƒWƒƒ["
+            VALUE "FileDescription", "AviUtl æ³¢å½¢ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ç”¨ã‚­ãƒ£ãƒƒã‚·ãƒ¥ãƒãƒãƒ¼ã‚¸ãƒ£ãƒ¼"
             VALUE "FileVersion", "0.3.0.0"
             VALUE "InternalName", "WaveformPreview.exe"
             VALUE "LegalCopyright", "Copyright (C) 2021 karoterra"
             VALUE "OriginalFilename", "WaveformPreview.exe"
-            VALUE "ProductName", "”gŒ`ƒvƒŒƒrƒ…[ƒvƒ‰ƒOƒCƒ“"
+            VALUE "ProductName", "æ³¢å½¢ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ãƒ—ãƒ©ã‚°ã‚¤ãƒ³"
             VALUE "ProductVersion", "0.3.0.0"
         END
     END
@@ -82,7 +82,7 @@ BEGIN
     END
 END
 
-#endif    // “ú–{Œê (“ú–{) resources
+#endif    // æ—¥æœ¬èª (æ—¥æœ¬) resources
 /////////////////////////////////////////////////////////////////////////////
 
 

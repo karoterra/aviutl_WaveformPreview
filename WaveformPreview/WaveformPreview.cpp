@@ -24,7 +24,7 @@ WaveformPreview::~WaveformPreview()
 BOOL WaveformPreview::Init(FILTER *fp)
 {
     if (m_wnd.Attach(fp->hwnd) == FALSE) {
-        ShowError(NULL, _T("”gŒ`ƒvƒŒƒrƒ…[‚Ì‰Šú‰»‚É¸”s‚µ‚Ü‚µ‚½B\n(m_wnd.Attach)"));
+        ShowError(NULL, _T("æ³¢å½¢ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ã®åˆæœŸåŒ–ã«å¤±æ•—ã—ã¾ã—ãŸã€‚\n(m_wnd.Attach)"));
         return FALSE;
     }
     m_wnd.SetWindowText(fp->name);
@@ -35,8 +35,8 @@ BOOL WaveformPreview::Init(FILTER *fp)
 
     CRect updateRect(m_zoom.Width, 0, m_zoom.Width + 95, 25);
     DWORD style = WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON;
-    if (m_cacheBtn.Create("ƒLƒƒƒbƒVƒ…ì¬", style, updateRect, &m_wnd, (UINT)CommandId::Cache) == FALSE) {
-        ShowError(NULL, _T("”gŒ`ƒvƒŒƒrƒ…[‚Ì‰Šú‰»‚É¸”s‚µ‚Ü‚µ‚½B\n(m_cacheBtn.Create)"));
+    if (m_cacheBtn.Create("ã‚­ãƒ£ãƒƒã‚·ãƒ¥ä½œæˆ", style, updateRect, &m_wnd, (UINT)CommandId::Cache) == FALSE) {
+        ShowError(NULL, _T("æ³¢å½¢ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ã®åˆæœŸåŒ–ã«å¤±æ•—ã—ã¾ã—ãŸã€‚\n(m_cacheBtn.Create)"));
         m_wnd.Detach();
         return FALSE;
     }
@@ -44,8 +44,8 @@ BOOL WaveformPreview::Init(FILTER *fp)
 
     CRect configRect(updateRect.right, 0, updateRect.right + 50, 25);
     style = WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON;
-    if (m_configBtn.Create("İ’è", style, configRect, &m_wnd, (UINT)CommandId::Config) == FALSE) {
-        ShowError(NULL, _T("”gŒ`ƒvƒŒƒrƒ…[‚Ì‰Šú‰»‚É¸”s‚µ‚Ü‚µ‚½B\n(m_configBtn.Create)"));
+    if (m_configBtn.Create("è¨­å®š", style, configRect, &m_wnd, (UINT)CommandId::Config) == FALSE) {
+        ShowError(NULL, _T("æ³¢å½¢ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ã®åˆæœŸåŒ–ã«å¤±æ•—ã—ã¾ã—ãŸã€‚\n(m_configBtn.Create)"));
         m_wnd.Detach();
         return FALSE;
     }
@@ -53,7 +53,7 @@ BOOL WaveformPreview::Init(FILTER *fp)
 
     m_waveformRect = CRect(0, m_zoom.Height, m_rect.right, m_rect.bottom);
     if (m_waveform.Create(m_waveformRect, &m_wnd, &m_font) == FALSE) {
-        ShowError(NULL, _T("”gŒ`ƒvƒŒƒrƒ…[‚Ì‰Šú‰»‚É¸”s‚µ‚Ü‚µ‚½B\n(m_waveform.Create)"));
+        ShowError(NULL, _T("æ³¢å½¢ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ã®åˆæœŸåŒ–ã«å¤±æ•—ã—ã¾ã—ãŸã€‚\n(m_waveform.Create)"));
         m_wnd.Detach();
         return FALSE;
     }
@@ -65,7 +65,7 @@ BOOL WaveformPreview::Init(FILTER *fp)
     }
     catch (runtime_error &e) {
         m_cacheBtn.EnableWindow(FALSE);
-        string s = "ƒLƒƒƒbƒVƒ…ƒ}ƒl[ƒWƒƒ[‚Ì‰Šú‰»‚É¸”s‚µ‚Ü‚µ‚½B\n\n" + string(e.what());
+        string s = "ã‚­ãƒ£ãƒƒã‚·ãƒ¥ãƒãƒãƒ¼ã‚¸ãƒ£ãƒ¼ã®åˆæœŸåŒ–ã«å¤±æ•—ã—ã¾ã—ãŸã€‚\n\n" + string(e.what());
         ShowError(NULL, s.c_str());
     }
 
@@ -78,7 +78,7 @@ BOOL WaveformPreview::Init(FILTER *fp)
     fp->exfunc->get_sys_info(nullptr, &sysInfo);
     for (int i = 0; i < sysInfo.filter_n; i++) {
         FILTER *fp1 = (FILTER *)fp->exfunc->get_filterp(i);
-        if (_tcscmp(fp1->name, _T("Ä¶ƒEƒBƒ“ƒhƒE")) == 0) {
+        if (_tcscmp(fp1->name, _T("å†ç”Ÿã‚¦ã‚£ãƒ³ãƒ‰ã‚¦")) == 0) {
             m_playbackWnd.Attach(fp1->hwnd);
             break;
         }
@@ -100,7 +100,7 @@ void WaveformPreview::Exit(FILTER *fp)
         m_cacheProcess.Exit();
     }
     catch (runtime_error &e) {
-        string msg = "ƒLƒƒƒbƒVƒ…ƒ}ƒl[ƒWƒƒ[‚Æ‚Ì’ÊM‚É¸”s‚µ‚Ü‚µ‚½B\n\n" + string(e.what());
+        string msg = "ã‚­ãƒ£ãƒƒã‚·ãƒ¥ãƒãƒãƒ¼ã‚¸ãƒ£ãƒ¼ã¨ã®é€šä¿¡ã«å¤±æ•—ã—ã¾ã—ãŸã€‚\n\n" + string(e.what());
         ShowError(m_wnd.m_hWnd, msg.c_str());
     }
 }
@@ -142,7 +142,7 @@ void WaveformPreview::CreateWaveform(FILTER *fp, void *editp)
         catch (runtime_error &e) {
             m_cacheProcess.Terminate();
             m_cacheBtn.EnableWindow(FALSE);
-            string msg = "ƒLƒƒƒbƒVƒ…ƒ}ƒl[ƒWƒƒ[‚Æ‚Ì’ÊM‚É¸”s‚µ‚Ü‚µ‚½B\n\n" + string(e.what());
+            string msg = "ã‚­ãƒ£ãƒƒã‚·ãƒ¥ãƒãƒãƒ¼ã‚¸ãƒ£ãƒ¼ã¨ã®é€šä¿¡ã«å¤±æ•—ã—ã¾ã—ãŸã€‚\n\n" + string(e.what());
             ShowError(m_wnd.m_hWnd, msg.c_str());
         }
     }
@@ -159,13 +159,13 @@ void WaveformPreview::ClearCache()
     try {
         m_editStatus.cacheStart = -1;
         m_editStatus.cacheEnd = -1;
-        m_cacheBtn.SetWindowTextA(_T("ƒLƒƒƒbƒVƒ…ì¬"));
+        m_cacheBtn.SetWindowTextA(_T("ã‚­ãƒ£ãƒƒã‚·ãƒ¥ä½œæˆ"));
         m_cacheProcess.Clear();
     }
     catch (runtime_error &e) {
         m_cacheProcess.Terminate();
         m_cacheBtn.EnableWindow(FALSE);
-        string msg = "ƒLƒƒƒbƒVƒ…ƒ}ƒl[ƒWƒƒ[‚Æ‚Ì’ÊM‚É¸”s‚µ‚Ü‚µ‚½B\n\n" + string(e.what());
+        string msg = "ã‚­ãƒ£ãƒƒã‚·ãƒ¥ãƒãƒãƒ¼ã‚¸ãƒ£ãƒ¼ã¨ã®é€šä¿¡ã«å¤±æ•—ã—ã¾ã—ãŸã€‚\n\n" + string(e.what());
         ShowError(m_wnd.m_hWnd, msg.c_str());
     }
 }
@@ -185,16 +185,16 @@ void WaveformPreview::CreateCache(FILTER *fp, void *editp)
         m_cacheProcess.CreateCache(fp, editp, start, end);
         m_editStatus.cacheStart = start;
         m_editStatus.cacheEnd = end;
-        m_cacheBtn.SetWindowTextA(_T("ƒLƒƒƒbƒVƒ…íœ"));
+        m_cacheBtn.SetWindowTextA(_T("ã‚­ãƒ£ãƒƒã‚·ãƒ¥å‰Šé™¤"));
     }
     catch (bad_alloc &e) {
-        ShowWarning(NULL, _T("ƒLƒƒƒbƒVƒ…‚Ìì¬‚É¸”s‚µ‚Ü‚µ‚½B\n‘I‘ğ”ÍˆÍ‚ğ‹·‚­‚µ‚ÄÄ“x‚µ‚Ä‚­‚¾‚³‚¢B"));
+        ShowWarning(NULL, _T("ã‚­ãƒ£ãƒƒã‚·ãƒ¥ã®ä½œæˆã«å¤±æ•—ã—ã¾ã—ãŸã€‚\né¸æŠç¯„å›²ã‚’ç‹­ãã—ã¦å†åº¦è©¦ã—ã¦ãã ã•ã„ã€‚"));
         ClearCache();
     }
     catch (runtime_error &e) {
         m_cacheProcess.Terminate();
         m_cacheBtn.EnableWindow(FALSE);
-        string msg = "ƒLƒƒƒbƒVƒ…ƒ}ƒl[ƒWƒƒ[‚Æ‚Ì’ÊM‚É¸”s‚µ‚Ü‚µ‚½B\n\n" + string(e.what());
+        string msg = "ã‚­ãƒ£ãƒƒã‚·ãƒ¥ãƒãƒãƒ¼ã‚¸ãƒ£ãƒ¼ã¨ã®é€šä¿¡ã«å¤±æ•—ã—ã¾ã—ãŸã€‚\n\n" + string(e.what());
         ShowError(m_wnd.m_hWnd, msg.c_str());
     }
 

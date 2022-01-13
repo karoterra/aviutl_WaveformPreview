@@ -13,7 +13,7 @@
 #undef APSTUDIO_READONLY_SYMBOLS
 
 /////////////////////////////////////////////////////////////////////////////
-// “ú–{Œê (“ú–{) resources
+// æ—¥æœ¬èªž (æ—¥æœ¬) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_JPN)
 LANGUAGE LANG_JAPANESE, SUBLANG_DEFAULT
@@ -52,57 +52,57 @@ END
 
 IDD_CONFIG DIALOGEX 0, 0, 255, 266
 STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
-CAPTION "”gŒ`ƒvƒŒƒrƒ…[‚ÌÝ’è"
+CAPTION "æ³¢å½¢ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ã®è¨­å®š"
 FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
     DEFPUSHBUTTON   "OK",IDOK,144,246,50,14
-    PUSHBUTTON      "ƒLƒƒƒ“ƒZƒ‹",IDCANCEL,198,246,50,14
-    LTEXT           "‰¡Ž²‚Ì’PˆÊ",IDC_STATIC,7,7,40,8
-    CONTROL         "Žž•ª•b",IDC_SCALE_X_TIME,"Button",BS_AUTORADIOBUTTON | WS_GROUP,78,6,40,10
-    CONTROL         "ƒtƒŒ[ƒ€",IDC_SCALE_X_FRAME,"Button",BS_AUTORADIOBUTTON,120,6,41,10
-    LTEXT           "cŽ²‚Ì’PˆÊ",IDC_STATIC,7,18,40,8
-    CONTROL         "üŒ`",IDC_SCALE_Y_LINEAR,"Button",BS_AUTORADIOBUTTON | WS_GROUP,78,18,32,10
+    PUSHBUTTON      "ã‚­ãƒ£ãƒ³ã‚»ãƒ«",IDCANCEL,198,246,50,14
+    LTEXT           "æ¨ªè»¸ã®å˜ä½",IDC_STATIC,7,7,40,8
+    CONTROL         "æ™‚åˆ†ç§’",IDC_SCALE_X_TIME,"Button",BS_AUTORADIOBUTTON | WS_GROUP,78,6,40,10
+    CONTROL         "ãƒ•ãƒ¬ãƒ¼ãƒ ",IDC_SCALE_X_FRAME,"Button",BS_AUTORADIOBUTTON,120,6,41,10
+    LTEXT           "ç¸¦è»¸ã®å˜ä½",IDC_STATIC,7,18,40,8
+    CONTROL         "ç·šå½¢",IDC_SCALE_Y_LINEAR,"Button",BS_AUTORADIOBUTTON | WS_GROUP,78,18,32,10
     CONTROL         "dB (peak)",IDC_SCALE_Y_DB,"Button",BS_AUTORADIOBUTTON,120,18,47,10
-    LTEXT           "ƒfƒVƒxƒ‹‰ºŒÀ",IDC_STATIC,18,30,44,8
+    LTEXT           "ãƒ‡ã‚·ãƒ™ãƒ«ä¸‹é™",IDC_STATIC,18,30,44,8
     EDITTEXT        IDC_DB_MIN,78,30,78,14,ES_AUTOHSCROLL
     CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDFRAME,6,48,240,1
-    CONTROL         "ƒOƒŠƒbƒh‚Ì•\Ž¦",IDC_ENABLE_GRID,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,6,54,60,10
-    LTEXT           "ƒeƒ“ƒ|",IDC_STATIC,6,66,30,8
+    CONTROL         "ã‚°ãƒªãƒƒãƒ‰ã®è¡¨ç¤º",IDC_ENABLE_GRID,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,6,54,60,10
+    LTEXT           "ãƒ†ãƒ³ãƒ",IDC_STATIC,6,66,30,8
     EDITTEXT        IDC_TEMPO,78,66,78,12,ES_AUTOHSCROLL
-    LTEXT           "”Žq",IDC_STATIC,6,78,17,8
+    LTEXT           "æ‹å­",IDC_STATIC,6,78,17,8
     EDITTEXT        IDC_BEAT,78,78,78,12,ES_AUTOHSCROLL | ES_NUMBER
-    LTEXT           "Šî€ƒtƒŒ[ƒ€",IDC_STATIC,6,91,42,8
+    LTEXT           "åŸºæº–ãƒ•ãƒ¬ãƒ¼ãƒ ",IDC_STATIC,6,91,42,8
     EDITTEXT        IDC_OFFSET,78,90,78,12,ES_AUTOHSCROLL
     CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDFRAME,6,108,240,1
-    CONTROL         "ƒtƒŒ[ƒ€ˆÚ“®Žž‚ÉŽ©“®“I‚ÉƒXƒNƒ[ƒ‹‚·‚é",IDC_AUTO_FOCUS,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,6,114,144,10
-    LTEXT           "ƒY[ƒ€‚ÌŠî€",IDC_STATIC,6,126,44,8
-    CONTROL         "Œ»Ý‚ÌƒtƒŒ[ƒ€",IDC_PIVOT_FRAME,"Button",BS_AUTORADIOBUTTON | WS_GROUP,102,126,63,10
-    CONTROL         "ƒ}ƒEƒXƒJ[ƒ\ƒ‹",IDC_PIVOT_MOUSE,"Button",BS_AUTORADIOBUTTON,168,126,59,10
-    LTEXT           "‘S‘I‘ðŽž‚ÌƒLƒƒƒbƒVƒ…”ÍˆÍ",IDC_STATIC,6,138,84,8
-    CONTROL         "‘SƒtƒŒ[ƒ€",IDC_CACHE_RANGE_ALL,"Button",BS_AUTORADIOBUTTON | WS_GROUP,102,138,49,10
-    CONTROL         "•\Ž¦”ÍˆÍ‚Ì‚Ý",IDC_CACHE_RANGE_DISPLAY,"Button",BS_AUTORADIOBUTTON,168,138,62,10
+    CONTROL         "ãƒ•ãƒ¬ãƒ¼ãƒ ç§»å‹•æ™‚ã«è‡ªå‹•çš„ã«ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ã™ã‚‹",IDC_AUTO_FOCUS,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,6,114,144,10
+    LTEXT           "ã‚ºãƒ¼ãƒ ã®åŸºæº–",IDC_STATIC,6,126,44,8
+    CONTROL         "ç¾åœ¨ã®ãƒ•ãƒ¬ãƒ¼ãƒ ",IDC_PIVOT_FRAME,"Button",BS_AUTORADIOBUTTON | WS_GROUP,102,126,63,10
+    CONTROL         "ãƒžã‚¦ã‚¹ã‚«ãƒ¼ã‚½ãƒ«",IDC_PIVOT_MOUSE,"Button",BS_AUTORADIOBUTTON,168,126,59,10
+    LTEXT           "å…¨é¸æŠžæ™‚ã®ã‚­ãƒ£ãƒƒã‚·ãƒ¥ç¯„å›²",IDC_STATIC,6,138,84,8
+    CONTROL         "å…¨ãƒ•ãƒ¬ãƒ¼ãƒ ",IDC_CACHE_RANGE_ALL,"Button",BS_AUTORADIOBUTTON | WS_GROUP,102,138,49,10
+    CONTROL         "è¡¨ç¤ºç¯„å›²ã®ã¿",IDC_CACHE_RANGE_DISPLAY,"Button",BS_AUTORADIOBUTTON,168,138,62,10
     CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDFRAME,6,156,240,1
-    LTEXT           "”wŒi",IDC_STATIC,6,162,17,8
+    LTEXT           "èƒŒæ™¯",IDC_STATIC,6,162,17,8
     CONTROL         "",IDC_COLOR_BACKGROUND,"MfcColorButton",WS_TABSTOP,72,162,50,14
-    LTEXT           "”gŒ`",IDC_STATIC,6,174,17,8
+    LTEXT           "æ³¢å½¢",IDC_STATIC,6,174,17,8
     CONTROL         "",IDC_COLOR_WAVEFORM,"MfcColorButton",WS_TABSTOP,72,174,50,14
-    LTEXT           "–Ú·‚è",IDC_STATIC,6,186,22,8
+    LTEXT           "ç›®ç››ã‚Š",IDC_STATIC,6,186,22,8
     CONTROL         "",IDC_COLOR_SCALE,"MfcColorButton",WS_TABSTOP,72,186,50,12
-    LTEXT           "Œ»ÝƒtƒŒ[ƒ€",IDC_STATIC,6,198,42,8
+    LTEXT           "ç¾åœ¨ãƒ•ãƒ¬ãƒ¼ãƒ ",IDC_STATIC,6,198,42,8
     CONTROL         "",IDC_COLOR_CURSOR,"MfcColorButton",WS_TABSTOP,72,197,50,14
-    LTEXT           "ƒvƒŒƒrƒ…[ƒtƒŒ[ƒ€",IDC_STATIC,6,210,55,8
+    LTEXT           "ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ãƒ•ãƒ¬ãƒ¼ãƒ ",IDC_STATIC,6,210,55,8
     CONTROL         "",IDC_COLOR_PREVIEW,"MfcColorButton",WS_TABSTOP,72,210,50,14
-    LTEXT           "I’[",IDC_STATIC,6,222,17,8
+    LTEXT           "çµ‚ç«¯",IDC_STATIC,6,222,17,8
     CONTROL         "",IDC_COLOR_END,"MfcColorButton",WS_TABSTOP,72,222,50,14
-    LTEXT           "ƒLƒƒƒbƒVƒ…”ÍˆÍ",IDC_STATIC,138,162,46,8
+    LTEXT           "ã‚­ãƒ£ãƒƒã‚·ãƒ¥ç¯„å›²",IDC_STATIC,138,162,46,8
     CONTROL         "",IDC_COLOR_CACHE,"MfcColorButton",WS_TABSTOP,192,162,50,14
-    LTEXT           "‘I‘ð”ÍˆÍ",IDC_STATIC,138,174,33,8
+    LTEXT           "é¸æŠžç¯„å›²",IDC_STATIC,138,174,33,8
     CONTROL         "",IDC_COLOR_SELECT,"MfcColorButton",WS_TABSTOP,192,174,50,14
-    LTEXT           "”ñ‘I‘ð”ÍˆÍ",IDC_STATIC,138,186,41,8
+    LTEXT           "éžé¸æŠžç¯„å›²",IDC_STATIC,138,186,41,8
     CONTROL         "",IDC_COLOR_NONSELECT,"MfcColorButton",WS_TABSTOP,192,186,50,14
-    LTEXT           "ƒOƒŠƒbƒh1",IDC_STATIC,138,198,26,8
+    LTEXT           "ã‚°ãƒªãƒƒãƒ‰1",IDC_STATIC,138,198,26,8
     CONTROL         "",IDC_COLOR_GRID1,"MfcColorButton",WS_TABSTOP,192,198,50,14
-    LTEXT           "ƒOƒŠƒbƒh2",IDC_STATIC,138,210,26,8
+    LTEXT           "ã‚°ãƒªãƒƒãƒ‰2",IDC_STATIC,138,210,26,8
     CONTROL         "",IDC_COLOR_GRID2,"MfcColorButton",WS_TABSTOP,192,210,50,14
 END
 
@@ -313,12 +313,12 @@ BEGIN
     BEGIN
         BLOCK "041104b0"
         BEGIN
-            VALUE "FileDescription", "AviUtl ”gŒ`ƒvƒŒƒrƒ…[ ƒvƒ‰ƒOƒCƒ“"
+            VALUE "FileDescription", "AviUtl æ³¢å½¢ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ ãƒ—ãƒ©ã‚°ã‚¤ãƒ³"
             VALUE "FileVersion", "0.3.0.0"
             VALUE "InternalName", "WaveformPreview.auf"
             VALUE "LegalCopyright", "Copyright (C) 2021 karoterra"
             VALUE "OriginalFilename", "WaveformPreview.auf"
-            VALUE "ProductName", "”gŒ`ƒvƒŒƒrƒ…[ƒvƒ‰ƒOƒCƒ“"
+            VALUE "ProductName", "æ³¢å½¢ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ãƒ—ãƒ©ã‚°ã‚¤ãƒ³"
             VALUE "ProductVersion", "0.3.0.0"
         END
     END
@@ -328,7 +328,7 @@ BEGIN
     END
 END
 
-#endif    // “ú–{Œê (“ú–{) resources
+#endif    // æ—¥æœ¬èªž (æ—¥æœ¬) resources
 /////////////////////////////////////////////////////////////////////////////
 
 

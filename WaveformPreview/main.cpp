@@ -11,7 +11,7 @@ static FILTER_DLL filter = {
     FILTER_FLAG_WINDOW_SIZE | FILTER_FLAG_WINDOW_THICKFRAME | FILTER_FLAG_WINDOW_HSCROLL |
     FILTER_FLAG_EX_INFORMATION,
     400, 300,
-    _T("波形プレビュー"),
+    _T("豕｢蠖｢繝励Ξ繝薙Η繝ｼ"),
     0, nullptr, nullptr, nullptr, nullptr,
     0, nullptr, nullptr,
     func_proc,
@@ -21,7 +21,7 @@ static FILTER_DLL filter = {
     func_WndProc,
     nullptr, nullptr,
     nullptr, 0,
-    _T("波形プレビュー v0.3.0 by karoterra"),
+    _T("豕｢蠖｢繝励Ξ繝薙Η繝ｼ v0.3.0 by karoterra"),
     nullptr,
     nullptr,
 };
@@ -34,7 +34,7 @@ EXTERN_C __declspec(dllexport) FILTER_DLL *__stdcall GetFilterTable()
 BOOL func_init(FILTER *fp)
 {
     if (!AfxWinInit(fp->dll_hinst, nullptr, ::GetCommandLine(), 0)) {
-        ShowError(NULL, _T("波形プレビューの初期化に失敗しました。\n(AfxWinInit)"));
+        ShowError(NULL, _T("豕｢蠖｢繝励Ξ繝薙Η繝ｼ縺ｮ蛻晄悄蛹悶↓螟ｱ謨励＠縺ｾ縺励◆縲�\n(AfxWinInit)"));
         return FALSE;
     }
 

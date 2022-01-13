@@ -1,1 +1,7 @@
 * text=auto
+
+*.h text working-tree-encoding=cp932
+*.c text working-tree-encoding=cp932
+*.hpp text working-tree-encoding=cp932
+*.cpp text working-tree-encoding=cp932
+*.rc text working-tree-encoding=cp932
