@@ -19,9 +19,8 @@ struct EditStatus
     AudioBuf waveform;
 
     void Clear();
-    void Load(FILTER *fp, void *editp, FILTER_PROC_INFO *fpip);
-    void CreateWaveform(FILTER *fp, void *editp, int pos, int width, double ppf);
-    void CreateWaveformMT(FILTER *fp, void *editp, int pos, int width, double ppf);
+    void Load(FILTER_PROC_INFO *fpip);
+    void CreateWaveform(int pos, int width, double ppf);
     void CreateWaveformFromCache(CacheProcess &cp, int pos, int width, double ppf);
 
     bool IsPreview() const;

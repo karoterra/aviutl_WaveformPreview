@@ -92,7 +92,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;WAVEFORMPREVIEW_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalOptions>/Zc:strictStrings- %(AdditionalOptions)</AdditionalOptions>
       <OpenMPSupport>true</OpenMPSupport>
       <PrecompiledHeader>Use</PrecompiledHeader>
@@ -118,7 +118,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;WAVEFORMPREVIEW_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalOptions>/Zc:strictStrings- %(AdditionalOptions)</AdditionalOptions>
       <OpenMPSupport>true</OpenMPSupport>
       <PrecompiledHeader>Use</PrecompiledHeader>
@@ -173,6 +173,7 @@
   <ItemGroup>
     <ClInclude Include="..\CacheManager\command.h" />
     <ClInclude Include="..\CacheManager\pipeio.h" />
+    <ClInclude Include="aviutl.h" />
     <ClInclude Include="CacheProcess.h" />
     <ClInclude Include="CConfigDialog.h" />
     <ClInclude Include="Config.h" />
@@ -188,6 +189,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\CacheManager\pipeio.cpp" />
+    <ClCompile Include="aviutl.cpp" />
     <ClCompile Include="CacheProcess.cpp" />
     <ClCompile Include="CConfigDialog.cpp" />
     <ClCompile Include="Config.cpp" />

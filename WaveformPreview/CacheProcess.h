@@ -11,7 +11,7 @@ public:
     void Terminate();
 
     void Clear();
-    void CreateCache(FILTER *fp, void *editp, int start, int end);
+    void CreateCache(int start, int end);
     void GetSamples(const double range[2], std::vector<short> &data);
 
 protected:

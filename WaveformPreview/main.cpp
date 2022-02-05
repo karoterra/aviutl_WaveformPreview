@@ -1,8 +1,10 @@
 #include "pch.h"
 #include "WaveformPreview.h"
 #include "misc.h"
+#include "aviutl.h"
 
 using namespace std;
+using namespace aviutl;
 
 WaveformPreview wp;
 
@@ -49,11 +51,10 @@ BOOL func_exit(FILTER *fp)
 
 BOOL func_proc(FILTER *fp, FILTER_PROC_INFO *fpip)
 {
-    if (fp->exfunc->is_filter_window_disp(fp) == FALSE
-        || fp->exfunc->is_saving(fpip->editp) == TRUE) {
+    if (IsFilterWindowDisp() == FALSE || IsSaving() != FALSE) {
         return FALSE;
     }
-    wp.LoadStatus(fp, fpip->editp, fpip);
+    wp.LoadStatus(fpip);
     return TRUE;
 }
 
@@ -66,45 +67,49 @@ BOOL func_WndProc(HWND hwnd, UINT message, WPARAM wparam, LPARAM lparam, void *e
     BOOL res = FALSE;
 
     switch (message) {
+    case WM_FILTER_INIT:
+        StoreAviUtlPtr(editp, fp);
+        wp.LoadConfig();
+        break;
     case WM_FILTER_FILE_CLOSE:
-        res = wp.OnFileClose(fp, editp);
+        res = wp.OnFileClose();
         break;
     case WM_FILTER_CHANGE_WINDOW:
-        if (fp->exfunc->is_filter_active(fp) && fp->exfunc->is_filter_window_disp(fp)) {
-            wp.LoadStatus(fp, editp);
+        if (IsFilterActive() != FALSE && IsFilterWindowDisp() != FALSE) {
+            wp.LoadStatus();
         }
         break;
     case WM_FILTER_SAVE_END:
-        wp.OnSaveEnd(fp, editp);
+        wp.OnSaveEnd();
         break;
     case WM_SIZE:
-        wp.OnSize(fp, editp, LOWORD(lparam), HIWORD(lparam));
+        wp.OnSize(LOWORD(lparam), HIWORD(lparam));
         break;
     case WM_COMMAND:
-        res = wp.OnCommand(fp, editp, wparam, lparam);
+        res = wp.OnCommand(wparam, lparam);
         break;
     case WM_HSCROLL:
-        res = wp.OnHScroll(fp, editp, LOWORD(wparam), HIWORD(wparam));
+        res = wp.OnHScroll(LOWORD(wparam), HIWORD(wparam));
         break;
     case WM_MOUSEWHEEL:
-        res = wp.OnMouseWheel(fp, editp,
+        res = wp.OnMouseWheel(
             GET_KEYSTATE_WPARAM(wparam), GET_WHEEL_DELTA_WPARAM(wparam),
             CPoint(LOWORD(lparam), HIWORD(lparam))
         );
         break;
     case WM_LBUTTONDOWN:
-        res = wp.OnLButtonDown(fp, editp, wparam, CPoint(LOWORD(lparam), HIWORD(lparam)));
+        res = wp.OnLButtonDown(wparam, CPoint(LOWORD(lparam), HIWORD(lparam)));
         break;
     case WM_MOUSEMOVE:
         if (wparam & MK_LBUTTON) {
-            res = wp.OnLButtonDown(fp, editp, wparam, CPoint(LOWORD(lparam), HIWORD(lparam)));
+            res = wp.OnLButtonDown(wparam, CPoint(LOWORD(lparam), HIWORD(lparam)));
         }
         break;
     case WM_KEYDOWN:
-        res = wp.OnKeyDown(fp, editp, wparam, lparam);
+        res = wp.OnKeyDown(wparam, lparam);
         break;
     case WM_KEYUP:
-        res = wp.OnKeyUp(fp, editp, wparam, lparam);
+        res = wp.OnKeyUp(wparam, lparam);
         break;
     }
     return res;
