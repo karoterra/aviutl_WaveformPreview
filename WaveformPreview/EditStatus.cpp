@@ -1,8 +1,10 @@
 #include "pch.h"
 #include "EditStatus.h"
 #include <omp.h>
+#include "aviutl.h"
 
 using namespace std;
+using namespace aviutl;
 
 void EditStatus::Clear()
 {
@@ -17,15 +19,15 @@ void EditStatus::Clear()
     waveform.clear();
 }
 
-void EditStatus::Load(FILTER *fp, void *editp, FILTER_PROC_INFO *fpip)
+void EditStatus::Load(FILTER_PROC_INFO *fpip)
 {
     FILE_INFO fi;
-    fp->exfunc->get_file_info(editp, &fi);
+    GetFileInfo(&fi);
 
-    currentFrame = fp->exfunc->get_frame(editp);
+    currentFrame = GetFrame();
     totalFrame = fi.frame_n;
     previewFrame = (fpip != nullptr) ? fpip->frame : currentFrame;
-    fp->exfunc->get_select_frame(editp, &selectStart, &selectEnd);
+    GetSelectFrame(&selectStart, &selectEnd);
 
     if (fi.flag & FILE_INFO_FLAG_VIDEO) {
         videoRate = (double)fi.video_rate / fi.video_scale;
@@ -44,7 +46,7 @@ void EditStatus::Load(FILTER *fp, void *editp, FILTER_PROC_INFO *fpip)
     }
 }
 
-void EditStatus::CreateWaveform(FILTER *fp, void *editp, int pos, int width, double ppf)
+void EditStatus::CreateWaveform(int pos, int width, double ppf)
 {
     if (audioCh == 0) {
         return;
@@ -60,13 +62,12 @@ void EditStatus::CreateWaveform(FILTER *fp, void *editp, int pos, int width, dou
         lastFrame = totalFrame;
     }
 
-    auto get_audio = fp->exfunc->get_audio_filtered;
     AudioBuf buf;
     for (int frame = pos; frame < lastFrame; frame++) {
-        int size = get_audio(editp, frame, nullptr);
+        int size = GetAudioFiltered(frame, nullptr);
         int bufSize = size * audioCh;
         buf.resize(bufSize);
-        get_audio(editp, frame, buf.data());
+        GetAudioFiltered(frame, buf.data());
         for (int i = 0; i < bufSize; i++) {
             int ch = i % audioCh;
             int x = (int)((frame - pos + (double)i / bufSize) * ppf);
@@ -76,74 +77,6 @@ void EditStatus::CreateWaveform(FILTER *fp, void *editp, int pos, int width, dou
             int idx = (x * audioCh + ch) * 2;
             waveform[idx] = max(buf[i], waveform[idx]);
             waveform[idx + 1] = min(buf[i], waveform[idx + 1]);
-        }
-    }
-}
-
-void EditStatus::CreateWaveformMT(FILTER *fp, void *editp, int pos, int width, double ppf)
-{
-    if (audioCh == 0) {
-        return;
-    }
-
-    waveform.resize(width * 2 * audioCh);
-    for (auto &v : waveform) {
-        v = 0;
-    }
-    double lastFrame = pos + width / ppf;
-    if (lastFrame >= totalFrame) {
-        width = (int)ceil((totalFrame - pos) * ppf);
-    }
-
-    auto get_audio = fp->exfunc->get_audio_filtered;
-    AudioBuf buf1, buf2;
-    AudioBuf *p1 = &buf1, *p2 = &buf2, *tmp = nullptr;
-    int ready = 0;
-#   pragma omp parallel num_threads(2)
-    {
-        switch (omp_get_thread_num()) {
-        case 0: {
-            for (int frame = pos; frame < lastFrame; frame++) {
-                while (ready) {
-#                   pragma omp flush(ready)
-                }
-#               pragma omp flush(p1)
-
-                p1->resize(get_audio(editp, frame, nullptr) * audioCh);
-                get_audio(editp, frame, p1->data());
-
-                ready = 1;
-#               pragma omp flush(ready)
-            }
-            break;
-        }
-        case 1: {
-            for (int frame = pos; frame < lastFrame; frame++) {
-                while (!ready) {
-#                   pragma omp flush(ready)
-                }
-                tmp = p1;
-                p1 = p2;
-                p2 = tmp;
-#               pragma omp flush(p1)
-
-                ready = 0;
-#               pragma omp flush(ready)
-
-                const int size = p2->size();
-                int last = (int)((width / ppf - (frame - pos)) * size);
-                if (size < last) last = size;
-                for (int i = 0; i < last; i++) {
-                    int ch = i % audioCh;
-                    int x = (int)((frame - pos + (double)i / size) * ppf);
-                    int idx = (x * audioCh + ch) * 2;
-                    short v = (*p2)[i];
-                    waveform[idx] = max(v, waveform[idx]);
-                    waveform[idx + 1] = min(v, waveform[idx + 1]);
-                }
-            }
-            break;
-        }
         }
     }
 }

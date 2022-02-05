@@ -173,6 +173,7 @@
   <ItemGroup>
     <ClInclude Include="..\CacheManager\command.h" />
     <ClInclude Include="..\CacheManager\pipeio.h" />
+    <ClInclude Include="aviutl.h" />
     <ClInclude Include="CacheProcess.h" />
     <ClInclude Include="CConfigDialog.h" />
     <ClInclude Include="Config.h" />
@@ -188,6 +189,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\CacheManager\pipeio.cpp" />
+    <ClCompile Include="aviutl.cpp" />
     <ClCompile Include="CacheProcess.cpp" />
     <ClCompile Include="CConfigDialog.cpp" />
     <ClCompile Include="Config.cpp" />
