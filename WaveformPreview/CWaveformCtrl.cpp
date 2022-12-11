@@ -225,7 +225,7 @@ void CWaveformCtrl::OnPaint()
         memDC.LineTo(x, m_rect.bottom);
     }
 
-    if (status->audioCh != 0) {
+    if (status->audioCh != 0 && status->waveform.size() > 0) {
         DrawWaveform(&memDC, CRect(0, 30, m_rect.right, m_rect.bottom));
     }
 
