@@ -2,8 +2,10 @@
 #include "CacheProcess.h"
 #include "../CacheManager/command.h"
 #include "../CacheManager/pipeio.h"
+#include "aviutl.h"
 
 using namespace std;
+using namespace aviutl;
 
 BOOL SafeCloseHandle(HANDLE &handle) {
     BOOL res = TRUE;
@@ -122,12 +124,12 @@ void CacheProcess::Clear()
     string s = ReadString(m_hRead);
 }
 
-void CacheProcess::CreateCache(FILTER *fp, void *editp, int start, int end)
+void CacheProcess::CreateCache(int start, int end)
 {
     if (m_hProcess == INVALID_HANDLE_VALUE) return;
 
     FILE_INFO fi;
-    fp->exfunc->get_file_info(editp, &fi);
+    GetFileInfo(&fi);
 
     WriteInt(m_hWrite, static_cast<int>(CacheCommand::SetStatus));
     WriteInt(m_hWrite, fi.audio_ch);
@@ -139,9 +141,9 @@ void CacheProcess::CreateCache(FILTER *fp, void *editp, int start, int end)
 
     vector<short> buf;
     for (int frame = start; frame <= end; frame++) {
-        int size = fp->exfunc->get_audio_filtered(editp, frame, nullptr) * fi.audio_ch;
+        int size = GetAudioFiltered(frame, nullptr) * fi.audio_ch;
         buf.resize(size);
-        fp->exfunc->get_audio_filtered(editp, frame, buf.data());
+        GetAudioFiltered(frame, buf.data());
         
         WriteInt(m_hWrite, static_cast<int>(CacheCommand::StoreFrame));
         WriteInt(m_hWrite, size);

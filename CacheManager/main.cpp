@@ -10,7 +10,7 @@ int main()
         cm.Main();
     }
     catch (exception &e) {
-        MessageBox(NULL, e.what(), "波形プレビュー(CacheManager)", MB_OK | MB_ICONERROR);
+        MessageBox(NULL, e.what(), "豕｢蠖｢繝励Ξ繝薙Η繝ｼ(CacheManager)", MB_OK | MB_ICONERROR);
     }
     return 0;
 }

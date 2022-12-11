@@ -3,8 +3,10 @@
 #include "CConfigDialog.h"
 #include "misc.h"
 #include <imm.h>
+#include "aviutl.h"
 
 using namespace std;
+using namespace aviutl;
 
 WaveformPreview::WaveformPreview()
     : m_waveform(this)
@@ -24,7 +26,7 @@ WaveformPreview::~WaveformPreview()
 BOOL WaveformPreview::Init(FILTER *fp)
 {
     if (m_wnd.Attach(fp->hwnd) == FALSE) {
-        ShowError(NULL, _T("”gŒ`ƒvƒŒƒrƒ…[‚Ì‰Šú‰»‚ÉŽ¸”s‚µ‚Ü‚µ‚½B\n(m_wnd.Attach)"));
+        ShowError(NULL, _T("æ³¢å½¢ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ã®åˆæœŸåŒ–ã«å¤±æ•—ã—ã¾ã—ãŸã€‚\n(m_wnd.Attach)"));
         return FALSE;
     }
     m_wnd.SetWindowText(fp->name);
@@ -35,8 +37,8 @@ BOOL WaveformPreview::Init(FILTER *fp)
 
     CRect updateRect(m_zoom.Width, 0, m_zoom.Width + 95, 25);
     DWORD style = WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON;
-    if (m_cacheBtn.Create("ƒLƒƒƒbƒVƒ…ì¬", style, updateRect, &m_wnd, (UINT)CommandId::Cache) == FALSE) {
-        ShowError(NULL, _T("”gŒ`ƒvƒŒƒrƒ…[‚Ì‰Šú‰»‚ÉŽ¸”s‚µ‚Ü‚µ‚½B\n(m_cacheBtn.Create)"));
+    if (m_cacheBtn.Create("ã‚­ãƒ£ãƒƒã‚·ãƒ¥ä½œæˆ", style, updateRect, &m_wnd, (UINT)CommandId::Cache) == FALSE) {
+        ShowError(NULL, _T("æ³¢å½¢ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ã®åˆæœŸåŒ–ã«å¤±æ•—ã—ã¾ã—ãŸã€‚\n(m_cacheBtn.Create)"));
         m_wnd.Detach();
         return FALSE;
     }
@@ -44,8 +46,8 @@ BOOL WaveformPreview::Init(FILTER *fp)
 
     CRect configRect(updateRect.right, 0, updateRect.right + 50, 25);
     style = WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON;
-    if (m_configBtn.Create("Ý’è", style, configRect, &m_wnd, (UINT)CommandId::Config) == FALSE) {
-        ShowError(NULL, _T("”gŒ`ƒvƒŒƒrƒ…[‚Ì‰Šú‰»‚ÉŽ¸”s‚µ‚Ü‚µ‚½B\n(m_configBtn.Create)"));
+    if (m_configBtn.Create("è¨­å®š", style, configRect, &m_wnd, (UINT)CommandId::Config) == FALSE) {
+        ShowError(NULL, _T("æ³¢å½¢ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ã®åˆæœŸåŒ–ã«å¤±æ•—ã—ã¾ã—ãŸã€‚\n(m_configBtn.Create)"));
         m_wnd.Detach();
         return FALSE;
     }
@@ -53,7 +55,7 @@ BOOL WaveformPreview::Init(FILTER *fp)
 
     m_waveformRect = CRect(0, m_zoom.Height, m_rect.right, m_rect.bottom);
     if (m_waveform.Create(m_waveformRect, &m_wnd, &m_font) == FALSE) {
-        ShowError(NULL, _T("”gŒ`ƒvƒŒƒrƒ…[‚Ì‰Šú‰»‚ÉŽ¸”s‚µ‚Ü‚µ‚½B\n(m_waveform.Create)"));
+        ShowError(NULL, _T("æ³¢å½¢ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ã®åˆæœŸåŒ–ã«å¤±æ•—ã—ã¾ã—ãŸã€‚\n(m_waveform.Create)"));
         m_wnd.Detach();
         return FALSE;
     }
@@ -65,20 +67,18 @@ BOOL WaveformPreview::Init(FILTER *fp)
     }
     catch (runtime_error &e) {
         m_cacheBtn.EnableWindow(FALSE);
-        string s = "ƒLƒƒƒbƒVƒ…ƒ}ƒl[ƒWƒƒ[‚Ì‰Šú‰»‚ÉŽ¸”s‚µ‚Ü‚µ‚½B\n\n" + string(e.what());
+        string s = "ã‚­ãƒ£ãƒƒã‚·ãƒ¥ãƒžãƒãƒ¼ã‚¸ãƒ£ãƒ¼ã®åˆæœŸåŒ–ã«å¤±æ•—ã—ã¾ã—ãŸã€‚\n\n" + string(e.what());
         ShowError(NULL, s.c_str());
     }
 
     m_editStatus.Clear();
     this->SetScrollPos(0);
 
-    m_config.LoadUserConfig(fp);
-
     SYS_INFO sysInfo;
     fp->exfunc->get_sys_info(nullptr, &sysInfo);
     for (int i = 0; i < sysInfo.filter_n; i++) {
         FILTER *fp1 = (FILTER *)fp->exfunc->get_filterp(i);
-        if (_tcscmp(fp1->name, _T("Ä¶ƒEƒBƒ“ƒhƒE")) == 0) {
+        if (_tcscmp(fp1->name, _T("å†ç”Ÿã‚¦ã‚£ãƒ³ãƒ‰ã‚¦")) == 0) {
             m_playbackWnd.Attach(fp1->hwnd);
             break;
         }
@@ -95,14 +95,24 @@ void WaveformPreview::Exit(FILTER *fp)
 {
     m_wnd.Detach();
     m_playbackWnd.Detach();
-    m_config.SaveUserConfig(fp);
+    SaveConfig();
     try {
         m_cacheProcess.Exit();
     }
     catch (runtime_error &e) {
-        string msg = "ƒLƒƒƒbƒVƒ…ƒ}ƒl[ƒWƒƒ[‚Æ‚Ì’ÊM‚ÉŽ¸”s‚µ‚Ü‚µ‚½B\n\n" + string(e.what());
+        string msg = "ã‚­ãƒ£ãƒƒã‚·ãƒ¥ãƒžãƒãƒ¼ã‚¸ãƒ£ãƒ¼ã¨ã®é€šä¿¡ã«å¤±æ•—ã—ã¾ã—ãŸã€‚\n\n" + string(e.what());
         ShowError(m_wnd.m_hWnd, msg.c_str());
     }
+}
+
+bool WaveformPreview::LoadConfig()
+{
+    return m_config.LoadUserConfig();
+}
+
+bool WaveformPreview::SaveConfig()
+{
+    return m_config.SaveUserConfig();
 }
 
 void WaveformPreview::ClearStatus()
@@ -112,9 +122,9 @@ void WaveformPreview::ClearStatus()
     m_prevFrame = 0;
 }
 
-void WaveformPreview::LoadStatus(FILTER *fp, void *editp, FILTER_PROC_INFO *fpip)
+void WaveformPreview::LoadStatus(FILTER_PROC_INFO *fpip)
 {
-    m_editStatus.Load(fp, editp, fpip);
+    m_editStatus.Load(fpip);
 
     int pos = GetScrollPos();
     int last = pos + (int)(m_waveformRect.Width() / GetPpf());
@@ -127,10 +137,10 @@ void WaveformPreview::LoadStatus(FILTER *fp, void *editp, FILTER_PROC_INFO *fpip
         }
     }
 
-    Update(fp, editp, pos, false);
+    Update(pos, false);
 }
 
-void WaveformPreview::CreateWaveform(FILTER *fp, void *editp)
+void WaveformPreview::CreateWaveform()
 {
     HCURSOR cursor = SetCursor(m_waitCursor);
 
@@ -142,13 +152,12 @@ void WaveformPreview::CreateWaveform(FILTER *fp, void *editp)
         catch (runtime_error &e) {
             m_cacheProcess.Terminate();
             m_cacheBtn.EnableWindow(FALSE);
-            string msg = "ƒLƒƒƒbƒVƒ…ƒ}ƒl[ƒWƒƒ[‚Æ‚Ì’ÊM‚ÉŽ¸”s‚µ‚Ü‚µ‚½B\n\n" + string(e.what());
+            string msg = "ã‚­ãƒ£ãƒƒã‚·ãƒ¥ãƒžãƒãƒ¼ã‚¸ãƒ£ãƒ¼ã¨ã®é€šä¿¡ã«å¤±æ•—ã—ã¾ã—ãŸã€‚\n\n" + string(e.what());
             ShowError(m_wnd.m_hWnd, msg.c_str());
         }
     }
     else {
-        m_editStatus.CreateWaveform(fp, editp,
-            GetScrollPos(), m_waveformRect.Width(), GetPpf());
+        m_editStatus.CreateWaveform(GetScrollPos(), m_waveformRect.Width(), GetPpf());
     }
 
     SetCursor(cursor);
@@ -159,18 +168,18 @@ void WaveformPreview::ClearCache()
     try {
         m_editStatus.cacheStart = -1;
         m_editStatus.cacheEnd = -1;
-        m_cacheBtn.SetWindowTextA(_T("ƒLƒƒƒbƒVƒ…ì¬"));
+        m_cacheBtn.SetWindowTextA(_T("ã‚­ãƒ£ãƒƒã‚·ãƒ¥ä½œæˆ"));
         m_cacheProcess.Clear();
     }
     catch (runtime_error &e) {
         m_cacheProcess.Terminate();
         m_cacheBtn.EnableWindow(FALSE);
-        string msg = "ƒLƒƒƒbƒVƒ…ƒ}ƒl[ƒWƒƒ[‚Æ‚Ì’ÊM‚ÉŽ¸”s‚µ‚Ü‚µ‚½B\n\n" + string(e.what());
+        string msg = "ã‚­ãƒ£ãƒƒã‚·ãƒ¥ãƒžãƒãƒ¼ã‚¸ãƒ£ãƒ¼ã¨ã®é€šä¿¡ã«å¤±æ•—ã—ã¾ã—ãŸã€‚\n\n" + string(e.what());
         ShowError(m_wnd.m_hWnd, msg.c_str());
     }
 }
 
-void WaveformPreview::CreateCache(FILTER *fp, void *editp)
+void WaveformPreview::CreateCache()
 {
     HCURSOR cursor = SetCursor(m_waitCursor);
 
@@ -182,19 +191,19 @@ void WaveformPreview::CreateCache(FILTER *fp, void *editp)
         end = min(end, m_editStatus.totalFrame - 1);
     }
     try {
-        m_cacheProcess.CreateCache(fp, editp, start, end);
+        m_cacheProcess.CreateCache(start, end);
         m_editStatus.cacheStart = start;
         m_editStatus.cacheEnd = end;
-        m_cacheBtn.SetWindowTextA(_T("ƒLƒƒƒbƒVƒ…íœ"));
+        m_cacheBtn.SetWindowTextA(_T("ã‚­ãƒ£ãƒƒã‚·ãƒ¥å‰Šé™¤"));
     }
     catch (bad_alloc &e) {
-        ShowWarning(NULL, _T("ƒLƒƒƒbƒVƒ…‚Ìì¬‚ÉŽ¸”s‚µ‚Ü‚µ‚½B\n‘I‘ð”ÍˆÍ‚ð‹·‚­‚µ‚ÄÄ“xŽŽ‚µ‚Ä‚­‚¾‚³‚¢B"));
+        ShowWarning(NULL, _T("ã‚­ãƒ£ãƒƒã‚·ãƒ¥ã®ä½œæˆã«å¤±æ•—ã—ã¾ã—ãŸã€‚\né¸æŠžç¯„å›²ã‚’ç‹­ãã—ã¦å†åº¦è©¦ã—ã¦ãã ã•ã„ã€‚"));
         ClearCache();
     }
     catch (runtime_error &e) {
         m_cacheProcess.Terminate();
         m_cacheBtn.EnableWindow(FALSE);
-        string msg = "ƒLƒƒƒbƒVƒ…ƒ}ƒl[ƒWƒƒ[‚Æ‚Ì’ÊM‚ÉŽ¸”s‚µ‚Ü‚µ‚½B\n\n" + string(e.what());
+        string msg = "ã‚­ãƒ£ãƒƒã‚·ãƒ¥ãƒžãƒãƒ¼ã‚¸ãƒ£ãƒ¼ã¨ã®é€šä¿¡ã«å¤±æ•—ã—ã¾ã—ãŸã€‚\n\n" + string(e.what());
         ShowError(m_wnd.m_hWnd, msg.c_str());
     }
 
@@ -208,7 +217,7 @@ void WaveformPreview::Display()
     return;
 }
 
-void WaveformPreview::Update(FILTER *fp, void *editp, int pos, bool recreate)
+void WaveformPreview::Update(int pos, bool recreate)
 {
     int prev = GetScrollPos();
     SetScrollPos(pos);
@@ -217,7 +226,7 @@ void WaveformPreview::Update(FILTER *fp, void *editp, int pos, bool recreate)
         || prev != pos
         || (!m_editStatus.IsCached() && !m_editStatus.IsPreview()))
     {
-        CreateWaveform(fp, editp);
+        CreateWaveform();
     }
 
     Display();
@@ -270,22 +279,20 @@ void WaveformPreview::SetScrollPos(int pos)
     m_wnd.SetScrollInfo(SB_HORZ, &si);
 }
 
-BOOL WaveformPreview::MoveFrame(FILTER *fp, void *editp, int frame, bool selectMode)
+BOOL WaveformPreview::MoveFrame(int frame, bool selectMode)
 {
-    if (!fp->exfunc->is_editing(editp)) {
-        return FALSE;
-    }
+    if (IsEditing() == FALSE) return FALSE;
 
-    int newFrame = fp->exfunc->set_frame(editp, frame);
+    int newFrame = SetFrame(frame);
     BOOL res = (m_editStatus.currentFrame != newFrame) ? TRUE : FALSE;
     if (!selectMode) {
         m_prevFrame = newFrame;
     }
     else if (m_prevFrame > newFrame) {
-        fp->exfunc->set_select_frame(editp, newFrame, m_prevFrame);
+        SetSelectFrame(newFrame, m_prevFrame);
     }
     else {
-        fp->exfunc->set_select_frame(editp, m_prevFrame, newFrame);
+        SetSelectFrame(m_prevFrame, newFrame);
     }
     return res;
 }
@@ -317,21 +324,21 @@ void WaveformPreview::ShowConfigDialog()
     m_wnd.SetActiveWindow();
 }
 
-BOOL WaveformPreview::OnFileClose(FILTER *fp, void *editp)
+BOOL WaveformPreview::OnFileClose()
 {
     ClearStatus();
-    Update(fp, editp, 0, true);
+    Update(0, true);
     return FALSE;
 }
 
-BOOL WaveformPreview::OnSaveEnd(FILTER* fp, void* edit)
+BOOL WaveformPreview::OnSaveEnd()
 {
     m_zoom.Invalidate();
     Display();
     return FALSE;
 }
 
-void WaveformPreview::OnSize(FILTER *fp, void *editp, int width, int height)
+void WaveformPreview::OnSize(int width, int height)
 {
     m_rect.right = width;
     m_rect.bottom = height;
@@ -341,22 +348,22 @@ void WaveformPreview::OnSize(FILTER *fp, void *editp, int width, int height)
         m_waveformRect.left, m_waveformRect.top,
         m_waveformRect.Width(), m_waveformRect.Height()
     );
-    Update(fp, editp, GetScrollPos(), true);
+    Update(GetScrollPos(), true);
 }
 
-BOOL WaveformPreview::OnCommand(FILTER *fp, void *editp, WPARAM wParam, LPARAM lParam)
+BOOL WaveformPreview::OnCommand(WPARAM wParam, LPARAM lParam)
 {
     switch (LOWORD(wParam)) {
     case (UINT)CommandId::Cache:
         m_wnd.SetFocus();
-        if (!fp->exfunc->is_editing(editp)) break;
+        if (IsEditing() == FALSE) break;
         if (m_editStatus.IsCached()) {
             ClearCache();
         }
         else {
-            CreateCache(fp, editp);
+            CreateCache();
         }
-        Update(fp, editp, GetScrollPos(), true);
+        Update(GetScrollPos(), true);
         break;
     case (UINT)CommandId::Config:
         ShowConfigDialog();
@@ -376,14 +383,14 @@ BOOL WaveformPreview::OnCommand(FILTER *fp, void *editp, WPARAM wParam, LPARAM l
             }
             double cursorX = (current - GetScrollPos()) * prevPpf;
             int pos = (int)(current - cursorX / GetPpf());
-            Update(fp, editp, pos, true);
+            Update(pos, true);
         }
         break;
     }
     return FALSE;
 }
 
-BOOL WaveformPreview::OnKeyDown(FILTER *fp, void *editp, UINT key, LPARAM lParam)
+BOOL WaveformPreview::OnKeyDown(UINT key, LPARAM lParam)
 {
     BOOL res = FALSE;
     switch (key) {
@@ -398,7 +405,7 @@ BOOL WaveformPreview::OnKeyDown(FILTER *fp, void *editp, UINT key, LPARAM lParam
     return res;
 }
 
-BOOL WaveformPreview::OnKeyUp(FILTER *fp, void *editp, UINT key, LPARAM lParam)
+BOOL WaveformPreview::OnKeyUp(UINT key, LPARAM lParam)
 {
     switch (key) {
     case VK_SHIFT:
@@ -412,9 +419,9 @@ BOOL WaveformPreview::OnKeyUp(FILTER *fp, void *editp, UINT key, LPARAM lParam)
     return FALSE;
 }
 
-BOOL WaveformPreview::OnLButtonDown(FILTER *fp, void *editp, UINT flags, CPoint point)
+BOOL WaveformPreview::OnLButtonDown(UINT flags, CPoint point)
 {
-    if (!fp->exfunc->is_editing(editp) || fp->exfunc->is_saving(editp)) {
+    if (IsEditing() == FALSE || IsSaving() != FALSE) {
         return FALSE;
     }
 
@@ -423,12 +430,12 @@ BOOL WaveformPreview::OnLButtonDown(FILTER *fp, void *editp, UINT flags, CPoint 
     if (newFrame < 0) {
         return FALSE;
     }
-    return MoveFrame(fp, editp, newFrame, (flags & MK_SHIFT) != 0);
+    return MoveFrame(newFrame, (flags & MK_SHIFT) != 0);
 }
 
-BOOL WaveformPreview::OnMouseWheel(FILTER *fp, void *editp, UINT flags, short delta, CPoint point)
+BOOL WaveformPreview::OnMouseWheel(UINT flags, short delta, CPoint point)
 {
-    if (fp->exfunc->is_saving(editp)) {
+    if (IsSaving() != FALSE) {
         return FALSE;
     }
 
@@ -443,14 +450,14 @@ BOOL WaveformPreview::OnMouseWheel(FILTER *fp, void *editp, UINT flags, short de
     else {
         int pos = GetScrollPos();
         pos -= (int)(100.0 * delta / WHEEL_DELTA / GetPpf());
-        Update(fp, editp, pos, false);
+        Update(pos, false);
     }
     return FALSE;
 }
 
-BOOL WaveformPreview::OnHScroll(FILTER *fp, void *editp, UINT sbCode, UINT pos)
+BOOL WaveformPreview::OnHScroll(UINT sbCode, UINT pos)
 {
-    if (fp->exfunc->is_saving(editp)) {
+    if (IsSaving() != FALSE) {
         return FALSE;
     }
 
@@ -479,7 +486,7 @@ BOOL WaveformPreview::OnHScroll(FILTER *fp, void *editp, UINT sbCode, UINT pos)
         break;
     }
     }
-    Update(fp, editp, _pos, false);
+    Update(_pos, false);
     return FALSE;
 }
 

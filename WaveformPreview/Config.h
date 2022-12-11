@@ -54,7 +54,8 @@ struct Config
 
     static std::string ColorToString(COLORREF color);
     static COLORREF StringToColor(const std::string &str, COLORREF def = 0);
-    static COLORREF IniLoadColor(FILTER *fp, LPSTR key, COLORREF def);
+    static COLORREF IniLoadColor(LPCSTR key, COLORREF def);
+    static BOOL IniSaveColor(LPCSTR key, COLORREF color);
 
     Config();
 
@@ -63,8 +64,8 @@ struct Config
     void SetTempo(const DecimalEx &tempo);
     void SetTempo(const std::string &tempo);
 
-    bool LoadUserConfig(FILTER *fp);
-    bool SaveUserConfig(FILTER *fp) const;
+    bool LoadUserConfig();
+    bool SaveUserConfig() const;
 
 protected:
     DecimalEx m_tempo;

@@ -22,16 +22,19 @@ public:
     BOOL Init(FILTER *fp);
     void Exit(FILTER *fp);
 
-    void ClearStatus();
-    void LoadStatus(FILTER *fp, void *editp, FILTER_PROC_INFO *fpip = nullptr);
+    bool LoadConfig();
+    bool SaveConfig();
 
-    void CreateWaveform(FILTER *fp, void *editp);
+    void ClearStatus();
+    void LoadStatus(FILTER_PROC_INFO *fpip = nullptr);
+
+    void CreateWaveform();
 
     void ClearCache();
-    void CreateCache(FILTER *fp, void *editp);
+    void CreateCache();
 
     void Display();
-    void Update(FILTER *fp, void *editp, int pos, bool recreate);
+    void Update(int pos, bool recreate);
 
     void ZoomIn();
     void ZoomOut();
@@ -46,22 +49,22 @@ public:
     int GetScrollPos() const;
     void SetScrollPos(int pos);
 
-    BOOL MoveFrame(FILTER *fp, void *editp, int frame, bool selectMode);
+    BOOL MoveFrame(int frame, bool selectMode);
 
     void Playback();
 
     void ShowConfigDialog();
 
-    BOOL OnFileClose(FILTER *fp, void *editp);
-    BOOL OnSaveEnd(FILTER *fp, void *edit);
+    BOOL OnFileClose();
+    BOOL OnSaveEnd();
 
-    void OnSize(FILTER *fp, void *editp, int width, int height);
-    BOOL OnCommand(FILTER *fp, void *editp, WPARAM wParam, LPARAM lParam);
-    BOOL OnKeyDown(FILTER *fp, void *editp, UINT key, LPARAM lParam);
-    BOOL OnKeyUp(FILTER *fp, void *editp, UINT key, LPARAM lParam);
-    BOOL OnLButtonDown(FILTER *fp, void *editp, UINT flags, CPoint point);
-    BOOL OnMouseWheel(FILTER *fp, void *editp, UINT flags, short delta, CPoint point);
-    BOOL OnHScroll(FILTER *fp, void *editp, UINT sbCode, UINT pos);
+    void OnSize(int width, int height);
+    BOOL OnCommand(WPARAM wParam, LPARAM lParam);
+    BOOL OnKeyDown(UINT key, LPARAM lParam);
+    BOOL OnKeyUp(UINT key, LPARAM lParam);
+    BOOL OnLButtonDown(UINT flags, CPoint point);
+    BOOL OnMouseWheel(UINT flags, short delta, CPoint point);
+    BOOL OnHScroll(UINT sbCode, UINT pos);
 
 protected:
     static constexpr double PxPerFrames[] = {
