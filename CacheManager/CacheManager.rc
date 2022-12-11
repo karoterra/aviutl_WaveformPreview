@@ -51,8 +51,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 0,3,0,0
- PRODUCTVERSION 0,3,0,0
+ FILEVERSION 0,3,1,0
+ PRODUCTVERSION 0,3,1,0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -68,12 +68,12 @@ BEGIN
         BLOCK "041104b0"
         BEGIN
             VALUE "FileDescription", "AviUtl 波形プレビュー プラグイン用キャッシュマネージャー"
-            VALUE "FileVersion", "0.3.0.0"
+            VALUE "FileVersion", "0.3.1.0"
             VALUE "InternalName", "WaveformPreview.exe"
             VALUE "LegalCopyright", "Copyright (C) 2021 karoterra"
             VALUE "OriginalFilename", "WaveformPreview.exe"
             VALUE "ProductName", "波形プレビュープラグイン"
-            VALUE "ProductVersion", "0.3.0.0"
+            VALUE "ProductVersion", "0.3.1.0"
         END
     END
     BLOCK "VarFileInfo"

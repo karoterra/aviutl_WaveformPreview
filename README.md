@@ -5,11 +5,12 @@
 
 ## 導入方法
 
-0. Microsoft Visual C++ 2019 再頒布可能パッケージ (x86) をインストールしてください。
-   - インストール済みのプログラムに「Microsoft Visual C++ 2015-2022 Redistributable (x86)」があれば大丈夫です。
-1. [Releases](https://github.com/karoterra/aviutl_WaveformPreview/releases/)
+1. Microsoft Visual C++ 再頒布可能パッケージ (x86) をインストールしてください。
+   - Visual Studio 2022 を含むものがインストールされていれば大丈夫です。
+   - [サポートされている最新の Visual C++ 再頒布可能パッケージのダウンロード | Microsoft Learn](https://learn.microsoft.com/ja-jp/cpp/windows/latest-supported-vc-redist?view=msvc-170)
+2. [Releases](https://github.com/karoterra/aviutl_WaveformPreview/releases/)
    から最新版のZIPファイルをダウンロードしてください。
-2. ZIPファイルを展開し、 `aviutl.exe` と同じ場所、または `aviutl.exe` と同じ場所にある
+3. ZIPファイルを展開し、 `aviutl.exe` と同じ場所、または `aviutl.exe` と同じ場所にある
    `plugins` フォルダに `WaveformPreview.auf` と `WaveformPreview.exe` をコピーしてください。
 
 ## 使い方
